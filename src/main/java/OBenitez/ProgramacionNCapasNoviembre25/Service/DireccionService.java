@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class DireccionService {
     @Autowired
-    private IDireccion iDireccion;
+    private IDireccion direccionRepository;
     
     public Result DeleteAddressById(int IdDireccion) {
         Result result = new Result();
         try {
-            Optional<Direccion> direccionDB = iDireccion.findById(IdDireccion);
+            Optional<Direccion> direccionDB = direccionRepository.findById(IdDireccion);
             
             if (!direccionDB.isPresent()) {
                 result.Correct = false;
@@ -23,7 +23,7 @@ public class DireccionService {
                 return result;
             }
             
-            iDireccion.deleteById(IdDireccion);
+            direccionRepository.deleteById(IdDireccion);
             result.Correct = true;
             
         } catch (Exception ex) {

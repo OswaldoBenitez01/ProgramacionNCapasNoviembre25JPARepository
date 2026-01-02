@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioService {
     @Autowired
-    private IUsuarioJPA iUsuarioJPA;
+    private IUsuarioJPA usuarioRepository;
     
     // ======================= GET ======================
     public Result GetAll(){
         Result result = new Result();
         
         try {
-            List<Usuario> usuarios = iUsuarioJPA.findAll();
+            List<Usuario> usuarios = usuarioRepository.findAll();
             if (usuarios.isEmpty() || usuarios == null) {
                 result.Correct = false;
                 result.ErrorMessage = "No se encontraron los usuarios";
@@ -40,7 +40,7 @@ public class UsuarioService {
     public Result BusquedaAbierta(OBenitez.ProgramacionNCapasNoviembre25.ML.Usuario usuario){
         Result result = new Result();
         try {
-            List<Usuario> usuarios = iUsuarioJPA.findByNombreLike(usuario.getNombre());
+            List<Usuario> usuarios = usuarioRepository.findByNombreLike(usuario.getNombre());
             if (usuarios.isEmpty() || usuarios == null) {
                 result.Correct = false;
                 result.ErrorMessage = "No se encontraron usuarios";
@@ -61,7 +61,7 @@ public class UsuarioService {
         Result result = new Result();
         
         try {
-            Optional<Usuario> usuario = iUsuarioJPA.findById(IdUsuario);
+            Optional<Usuario> usuario = usuarioRepository.findById(IdUsuario);
             if (!usuario.isPresent() || usuario == null) {
                 result.Correct = false;
                 result.ErrorMessage = "No se encontro al usuario";
@@ -82,14 +82,14 @@ public class UsuarioService {
         Result result = new Result();
 
         try {
-            Optional<Usuario> usuarioDB = iUsuarioJPA.findById(IdUsuario);
+            Optional<Usuario> usuarioDB = usuarioRepository.findById(IdUsuario);
             if (!usuarioDB.isPresent()) {
                 result.Correct = false;
                 result.ErrorMessage = "No se encontro al usuario";
                 return result;
             }
             usuarioDB.get().setStatus(Status);
-            iUsuarioJPA.save(usuarioDB.get());
+            usuarioRepository.save(usuarioDB.get());
             result.Correct = true;
         } catch (Exception ex) {
             result.Correct = false;
@@ -103,7 +103,7 @@ public class UsuarioService {
         
         try {
             
-            Optional<Usuario> usuarioDB = iUsuarioJPA.findById(IdUsuario);
+            Optional<Usuario> usuarioDB = usuarioRepository.findById(IdUsuario);
             if (!usuarioDB.isPresent()) {
                 result.Correct = false;
                 result.ErrorMessage = "No se encontro al usuario";
@@ -111,7 +111,7 @@ public class UsuarioService {
             }
             
             usuarioDB.get().setImagen(Foto);
-            iUsuarioJPA.save(usuarioDB.get());            
+            usuarioRepository.save(usuarioDB.get());            
             result.Correct = true;
         } catch (Exception ex) {
             result.Correct = false;
@@ -126,14 +126,14 @@ public class UsuarioService {
         Result result = new Result();
 
         try {
-            Optional<Usuario> usuarioDB = iUsuarioJPA.findById(IdUsuario);
+            Optional<Usuario> usuarioDB = usuarioRepository.findById(IdUsuario);
             if (!usuarioDB.isPresent()) {
                 result.Correct = false;
                 result.ErrorMessage = "No se encontro al usuario";
                 return result;
             }
             
-            iUsuarioJPA.deleteById(IdUsuario);
+            usuarioRepository.deleteById(IdUsuario);
             result.Correct = true;
         } catch (Exception ex) {
             result.Correct = false;
