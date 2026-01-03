@@ -40,7 +40,10 @@ public class UsuarioService {
     public Result BusquedaAbierta(OBenitez.ProgramacionNCapasNoviembre25.ML.Usuario usuario){
         Result result = new Result();
         try {
-            List<Usuario> usuarios = usuarioRepository.findByNombreLike(usuario.getNombre());
+            List<Usuario> usuarios = usuarioRepository.findByNombreIgnoreCaseContainingAndApellidoPaternoIgnoreCaseContainingAndApellidoMaternoIgnoreCaseContaining(
+                    usuario.getNombre(),
+                    usuario.getApellidoPaterno(),
+                    usuario.getApellidoMaterno());
             if (usuarios.isEmpty() || usuarios == null) {
                 result.Correct = false;
                 result.ErrorMessage = "No se encontraron usuarios";

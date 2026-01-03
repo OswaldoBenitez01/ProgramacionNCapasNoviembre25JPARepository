@@ -15,27 +15,27 @@ public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idrol")
-    private Integer IdRol;
+    private Integer idRol;
     
     @Column(name = "nombre")
-    private String Nombre;
+    private String nombre;
 
     //GETTER Y SETTERS
 
     public Integer getIdRol() {
-        return IdRol;
+        return idRol;
     }
 
-    public void setIdRol(Integer IdRol) {
-        this.IdRol = IdRol;
+    public void setIdRol(Integer idRol) {
+        this.idRol = idRol;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
     
 }

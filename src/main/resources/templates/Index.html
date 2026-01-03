@@ -52,8 +52,7 @@
                          <select
                             class="form-select"
                             th:field="*{rol.IdRol}">
-                            <option value="-1">Todos los roles</option>
-                            <option value="0">Sin rol asignado</option>
+                            <option value="">Todos los roles</option>
                             <option th:each="rol : ${Roles}"
                                     th:text="${rol.Nombre}"
                                     th:value="${rol.IdRol}"></option>

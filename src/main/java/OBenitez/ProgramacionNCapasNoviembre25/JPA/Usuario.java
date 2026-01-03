@@ -24,182 +24,182 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusuario")
-    private Integer IdUsuario;
+    private Integer idUsuario;
     
     @Column(name = "username")
-    private String Username;
+    private String username;
     
     @Column(name = "nombre")
-    private String Nombre;
+    private String nombre;
     
     @Column(name = "apellidopaterno")
-    private String ApellidoPaterno;
+    private String apellidoPaterno;
     
     @Column(name = "apellidomaterno")
-    private String ApellidoMaterno;
+    private String apellidoMaterno;
     
     @Column(name = "email")
-    private String Email;
+    private String email;
     
     @Column(name = "password")
-    private String Password;
+    private String password;
     
     @Column(name = "fechanacimiento")
     @Temporal(TemporalType.DATE)
-    private Date FechaNacimiento;
+    private Date fechaNacimiento;
     
     @Column(name = "sexo")
-    private String Sexo;
+    private String sexo;
     
     @Column(name = "telefono")
-    private String Telefono;
+    private String telefono;
     
     @Column(name = "celular")
-    private String Celular;
+    private String celular;
     
     @Column(name = "curp")
-    private String Curp;
+    private String curp;
     
     @Column(name = "status")
-    private Integer Status;
+    private Integer status;
     
     @Column(name = "imagen")
-    private String Imagen;
+    private String imagen;
     
     @ManyToOne
     @JoinColumn(name = "idrol")
-    public Rol Rol;
+    public Rol rol;
     
     @OneToMany(mappedBy = "Usuario", cascade = CascadeType.ALL)
-    public List<Direccion> Direcciones = new ArrayList<>();
+    public List<Direccion> direcciones = new ArrayList<>();
 
     //GETTERS Y SETTERS
 
     public Integer getIdUsuario() {
-        return IdUsuario;
+        return idUsuario;
     }
 
-    public void setIdUsuario(Integer IdUsuario) {
-        this.IdUsuario = IdUsuario;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
-    public void setUsername(String Username) {
-        this.Username = Username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getApellidoPaterno() {
-        return ApellidoPaterno;
+        return apellidoPaterno;
     }
 
-    public void setApellidoPaterno(String ApellidoPaterno) {
-        this.ApellidoPaterno = ApellidoPaterno;
+    public void setApellidoPaterno(String apellidoPaterno) {
+        this.apellidoPaterno = apellidoPaterno;
     }
 
     public String getApellidoMaterno() {
-        return ApellidoMaterno;
+        return apellidoMaterno;
     }
 
-    public void setApellidoMaterno(String ApellidoMaterno) {
-        this.ApellidoMaterno = ApellidoMaterno;
+    public void setApellidoMaterno(String apellidoMaterno) {
+        this.apellidoMaterno = apellidoMaterno;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
-    public void setPassword(String Password) {
-        this.Password = Password;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Date getFechaNacimiento() {
-        return FechaNacimiento;
+        return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date FechaNacimiento) {
-        this.FechaNacimiento = FechaNacimiento;
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
-    
+
     public String getSexo() {
-        return Sexo;
+        return sexo;
     }
 
-    public void setSexo(String Sexo) {
-        this.Sexo = Sexo;
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     public String getTelefono() {
-        return Telefono;
+        return telefono;
     }
 
-    public void setTelefono(String Telefono) {
-        this.Telefono = Telefono;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getCelular() {
-        return Celular;
+        return celular;
     }
 
-    public void setCelular(String Celular) {
-        this.Celular = Celular;
+    public void setCelular(String celular) {
+        this.celular = celular;
     }
 
     public String getCurp() {
-        return Curp;
+        return curp;
     }
 
-    public void setCurp(String Curp) {
-        this.Curp = Curp;
+    public void setCurp(String curp) {
+        this.curp = curp;
     }
 
     public Integer getStatus() {
-        return Status;
+        return status;
     }
 
-    public void setStatus(Integer Status) {
-        this.Status = Status;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getImagen() {
-        return Imagen;
+        return imagen;
     }
 
-    public void setImagen(String Imagen) {
-        this.Imagen = Imagen;
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public Rol getRol() {
-        return Rol;
+        return rol;
     }
 
-    public void setRol(Rol Rol) {
-        this.Rol = Rol;
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
 
     public List<Direccion> getDirecciones() {
-        return Direcciones;
+        return direcciones;
     }
 
-    public void setDirecciones(List<Direccion> Direcciones) {
-        this.Direcciones = Direcciones;
+    public void setDirecciones(List<Direccion> direcciones) {
+        this.direcciones = direcciones;
     }
 }

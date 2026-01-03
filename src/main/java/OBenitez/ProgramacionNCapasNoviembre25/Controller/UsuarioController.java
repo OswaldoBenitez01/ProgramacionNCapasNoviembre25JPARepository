@@ -71,12 +71,7 @@ public class UsuarioController {
     
     @PostMapping("busqueda")
     public String Busqueda(@ModelAttribute("usuario") Usuario usuario, Model model){
-        
-        Result result = usuarioService.BusquedaAbierta(usuario);
-        
-        if (!result.Correct) {
-            result = usuarioService.GetAll();
-        }
+        Result result = usuarioService.BusquedaAbierta(usuario);        
         
         if (result.Objects == null || result.Objects.isEmpty()) {
             model.addAttribute("mensajeBusqueda", true);
