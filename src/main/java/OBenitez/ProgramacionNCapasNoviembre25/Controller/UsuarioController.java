@@ -99,33 +99,32 @@ public class UsuarioController {
         return "UsuarioForm";
     }
     
-//    @PostMapping("add")
-//    public String Add(Model model, @ModelAttribute("Usuario") Usuario usuario, @RequestParam("imagenUsuario") MultipartFile imagenUsuario, RedirectAttributes redirectAttributes) throws IOException{
-//        
-//        // AGREGAR USUARIO FULL INFO
-//        if (imagenUsuario.isEmpty()) {
-//            usuario.setImagen(null);
-//        } else {
-//            String encodedString = Base64.getEncoder().encodeToString(imagenUsuario.getBytes());
-//            usuario.setImagen(encodedString);
-//        }
-//        usuario.setStatus(1);
-//
-//        ModelMapper modelMapper = new ModelMapper();
-//        OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioJPA = modelMapper.map(usuario, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class);
-//        Result result = usuarioJPADAOImplementation.Add(usuarioJPA);
-//
-//        //Result result = usuarioDAOImplementation.Add(usuario);
-//
-//        if(result.Correct){
-//            result.Object = "El usuario se agrego correctamente";
-//        } else{
-//            result.Object = "No fue posible agregar al usuario :c";
-//        }
-//        redirectAttributes.addFlashAttribute("resultAddUserFull", result);
-//        return "redirect:/Usuario";
-//   
-//    }
+    @PostMapping("add")
+    public String Add(Model model, @ModelAttribute("Usuario") Usuario usuario, @RequestParam("imagenUsuario") MultipartFile imagenUsuario, RedirectAttributes redirectAttributes) throws IOException{
+        
+        // AGREGAR USUARIO FULL INFO
+        if (imagenUsuario.isEmpty()) {
+            usuario.setImagen(null);
+        } else {
+            String encodedString = Base64.getEncoder().encodeToString(imagenUsuario.getBytes());
+            usuario.setImagen(encodedString);
+        }
+        usuario.setStatus(1);
+
+        ModelMapper modelMapper = new ModelMapper();
+        OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioJPA = modelMapper.map(usuario, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class);
+        Result result = usuarioService.Add(usuarioJPA);
+
+        //Result result = usuarioDAOImplementation.Add(usuario);
+
+        if(result.Correct){
+            result.Object = "El usuario se agrego correctamente";
+        } else{
+            result.Object = "No fue posible agregar al usuario :c";
+        }
+        redirectAttributes.addFlashAttribute("resultAddUserFull", result);
+        return "redirect:/Usuario";
+    }
     
     @GetMapping("detail/{IdUsuario}")
     public String Detail(@PathVariable("IdUsuario") int IdUsuario, Model model){
