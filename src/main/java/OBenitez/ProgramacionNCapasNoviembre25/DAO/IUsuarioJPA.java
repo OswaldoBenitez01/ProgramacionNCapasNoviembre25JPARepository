@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface IUsuarioJPA extends JpaRepository<Usuario, Integer>{    
+public interface IUsuarioJPA extends JpaRepository<Usuario, Integer>{ 
+    List<Usuario> findAllByOrderByIdUsuarioAsc();
     @Query("SELECT u FROM Usuario u WHERE " +
            "(:nombre IS NULL OR :nombre = '' OR LOWER(u.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
            "(:apellidoPaterno IS NULL OR :apellidoPaterno = '' OR LOWER(u.apellidoPaterno) LIKE LOWER(CONCAT('%', :apellidoPaterno, '%'))) AND " +

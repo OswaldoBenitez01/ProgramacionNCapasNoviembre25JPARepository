@@ -70,7 +70,7 @@ public class Usuario {
     @JoinColumn(name = "idrol")
     public Rol rol;
     
-    @OneToMany(mappedBy = "Usuario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     public List<Direccion> direcciones = new ArrayList<>();
 
     //GETTERS Y SETTERS

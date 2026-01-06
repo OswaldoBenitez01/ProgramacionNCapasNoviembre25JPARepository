@@ -7,7 +7,10 @@ import OBenitez.ProgramacionNCapasNoviembre25.ML.ErrorCarga;
 import OBenitez.ProgramacionNCapasNoviembre25.ML.Result;
 import OBenitez.ProgramacionNCapasNoviembre25.ML.Rol;
 import OBenitez.ProgramacionNCapasNoviembre25.ML.Usuario;
+import OBenitez.ProgramacionNCapasNoviembre25.Service.ColoniaService;
 import OBenitez.ProgramacionNCapasNoviembre25.Service.DireccionService;
+import OBenitez.ProgramacionNCapasNoviembre25.Service.EstadoService;
+import OBenitez.ProgramacionNCapasNoviembre25.Service.MunicipioService;
 import OBenitez.ProgramacionNCapasNoviembre25.Service.PaisService;
 import OBenitez.ProgramacionNCapasNoviembre25.Service.RolService;
 import OBenitez.ProgramacionNCapasNoviembre25.Service.UsuarioService;
@@ -53,6 +56,12 @@ public class UsuarioController {
     private RolService rolService;
     @Autowired
     private PaisService paisService;
+    @Autowired
+    private EstadoService estadoService;
+    @Autowired
+    private MunicipioService municipioService;
+    @Autowired
+    private ColoniaService coloniaService;
     @Autowired
     private DireccionService direccionService;
     
@@ -123,7 +132,7 @@ public class UsuarioController {
             result.Object = "No fue posible agregar al usuario :c";
         }
         redirectAttributes.addFlashAttribute("resultAddUserFull", result);
-        return "redirect:/Usuario";
+        return "redirect:/usuario";
     }
     
     @GetMapping("detail/{IdUsuario}")
@@ -227,105 +236,69 @@ public class UsuarioController {
         return "redirect:/usuario/detail/"+IdUsuario;
     }
      
-//    @GetMapping("getEstadosByPais/{idPais}")
-//    @ResponseBody // retorna un dato estructurado
-//    public Result EstadosByPais(@PathVariable("idPais") int idPais){
-//        Result result = estadoDAOImplementation.GetEstadosByPais(idPais);
-//        return result;
-//    }
-//    @GetMapping("getMunicipiosByEstado/{idEstado}")
-//    @ResponseBody // retorna un dato estructurado
-//    public Result MunicipiosByEstado(@PathVariable("idEstado") int idEstado){
-//        Result result = municipioDAOImplementation.GetMunicipiosByEstado(idEstado);
-//        return result;
-//    }
-//    @GetMapping("getColoniasByMunicipio/{idMunicipio}")
-//    @ResponseBody // retorna un dato estructurado
-//    public Result ColoniasByMunicipio(@PathVariable("idMunicipio") int idMunicipio){
-//        Result result = coloniaDAOImplementation.GetColoniasByMunicipio(idMunicipio);
-//        return result;
-//    }
-//    
-//    
-////    @GetMapping("/formEditable")
-////    public String Form(@RequestParam("IdUsuario") int IdUsuario, @RequestParam(required = false) Integer IdDireccion, Model model){
-////    
-////        if (IdDireccion == null) {
-////            // ==== EDITAR USUARIO
-////            Result result = usuarioDAOImplementation.GetByIdBasicInfo(IdUsuario);
-////            
-////            Usuario usuario = (Usuario) result.Object;
-////            usuario.Direcciones = new ArrayList<>();
-////            usuario.Direcciones.add(new Direccion());
-////            usuario.Direcciones.get(0).setIdDireccion(-1);
-////            model.addAttribute("Usuario", usuario);
-////            
-////            //Llenado de campos
-////            Result resultRol = rolDAOImplementation.GetALl();
-////            model.addAttribute("Roles", resultRol.Objects);
-////            Result resultPais = paisDAOImplementation.GetAll();
-////            model.addAttribute("Paises", resultPais.Objects);
-////
-////            return "UsuarioForm";
-////        } else if (IdDireccion == 0) {
-////            //AGREGAR DIRECCION
-////            Usuario usuario = new Usuario();
-////            usuario.setIdUsuario(IdUsuario);
-////            usuario.Direcciones = new ArrayList<>();
-////            usuario.Direcciones.add(new Direccion());
-////            model.addAttribute("Usuario", usuario);
-////            Result resultPais = paisDAOImplementation.GetAll();
-////            model.addAttribute("Paises", resultPais.Objects);
-////            
-////            return "UsuarioForm";
-////        } else {
-////            //EDITAR DIRECCION
-////            Result result = usuarioDAOImplementation.GetAddressById(IdUsuario,IdDireccion);
-////            model.addAttribute("Usuario", result.Object);
-////            Result resultPais = paisDAOImplementation.GetAll();
-////            model.addAttribute("Paises", resultPais.Objects);
-////            return "UsuarioForm";
-////        }
-////    
-////    }
-//    
-//    @PostMapping("formEditable")
-//    public String Form(@ModelAttribute Usuario usuario, RedirectAttributes redirectAttributes){
-//    
-//        if(usuario.Direcciones.get(0).getIdDireccion() == -1){
-//            
-//            //ACTUALIZAR INFORMACION BASICA USUARIO
-//            Result result = usuarioJPADAOImplementation.UpdateBasicById(usuario);
-//            if(result.Correct){
-//                result.Object = "El usuario se actualizo correctamente";
-//            } else{
-//                result.Object = "No fue posible actualizar al usuario :c";
-//            }
-//            redirectAttributes.addFlashAttribute("resultEditUserBasic", result);
-//            return "redirect:/Usuario/detail/"+usuario.getIdUsuario();
-//            
-//        }else if(usuario.Direcciones.get(0).getIdDireccion() == 0){
-//            //AGREGA UNA DIRECCION NUEVA
-//            Result result = usuarioJPADAOImplementation.AddAddressById(usuario);
-//            if(result.Correct){
-//                result.Object = "La direccion se agrego correctamente";
-//            } else{
-//                result.Object = "No fue posible agregar la direccion :c";
-//            }
-//            redirectAttributes.addFlashAttribute("resultAddAddress", result);
-//            return "redirect:/Usuario/detail/"+usuario.getIdUsuario();
-//        }else{
-//            //ACTUALIZA UNA DIRECCION           
-//            Result result = usuarioJPADAOImplementation.UpdateAddressById(usuario);            
-//            if(result.Correct){
-//                result.Object = "La direccion se actualizo correctamente";
-//            } else{
-//                result.Object = "No fue posible actualizar la direccion :c";
-//            }
-//            redirectAttributes.addFlashAttribute("resultEditAddress", result);
-//            return "redirect:/Usuario/detail/"+usuario.getIdUsuario();
-//        }
-//    }
+    @GetMapping("getEstadosByPais/{idPais}")
+    @ResponseBody // retorna un dato estructurado
+    public Result EstadosByPais(@PathVariable("idPais") int idPais){
+        Result result = estadoService.GetEstadosByPais(idPais);
+        return result;
+    }
+    @GetMapping("getMunicipiosByEstado/{idEstado}")
+    @ResponseBody // retorna un dato estructurado
+    public Result MunicipiosByEstado(@PathVariable("idEstado") int idEstado){
+        Result result = municipioService.GetMunicipiosByEstado(idEstado);
+        return result;
+    }
+    @GetMapping("getColoniasByMunicipio/{idMunicipio}")
+    @ResponseBody // retorna un dato estructurado
+    public Result ColoniasByMunicipio(@PathVariable("idMunicipio") int idMunicipio){
+        Result result = coloniaService.GetColoniasByMunicipio(idMunicipio);
+        return result;
+    }
+       
+    @PostMapping("formEditable")
+    public String Form(@ModelAttribute Usuario usuario, RedirectAttributes redirectAttributes){
+    
+        if(usuario.Direcciones.get(0).getIdDireccion() == -1){
+            
+            ModelMapper modelMapper = new ModelMapper();
+            OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioJPA = modelMapper.map(usuario, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class);
+            Result result = usuarioService.UpdateUser(usuarioJPA);
+            if(result.Correct){
+                result.Object = "El usuario se actualizo correctamente";
+            } else{
+                result.Object = "No fue posible actualizar al usuario :c";
+            }
+            redirectAttributes.addFlashAttribute("resultEditUserBasic", result);
+            return "redirect:/usuario/detail/"+usuario.getIdUsuario();
+            
+        }else if(usuario.Direcciones.get(0).getIdDireccion() == 0){
+            //AGREGA UNA DIRECCION NUEVA
+            ModelMapper modelMapper = new ModelMapper();
+            OBenitez.ProgramacionNCapasNoviembre25.JPA.Direccion direccionJPA = modelMapper.map(usuario.Direcciones.get(0), OBenitez.ProgramacionNCapasNoviembre25.JPA.Direccion.class);
+            direccionJPA.usuario = new OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario();
+            direccionJPA.usuario.setIdUsuario(usuario.getIdUsuario());
+            Result result = direccionService.AddAddress(direccionJPA);
+            if(result.Correct){
+                result.Object = "La direccion se agrego correctamente";
+            } else{
+                result.Object = "No fue posible agregar la direccion :c";
+            }
+            redirectAttributes.addFlashAttribute("resultAddAddress", result);
+            return "redirect:/usuario/detail/"+usuario.getIdUsuario();
+        }else{
+            //ACTUALIZA UNA DIRECCION
+            ModelMapper modelMapper = new ModelMapper();
+            OBenitez.ProgramacionNCapasNoviembre25.JPA.Direccion direccionJPA = modelMapper.map(usuario.Direcciones.get(0), OBenitez.ProgramacionNCapasNoviembre25.JPA.Direccion.class);
+            Result result = direccionService.UpdateAddressById(direccionJPA);            
+            if(result.Correct){
+                result.Object = "La direccion se actualizo correctamente";
+            } else{
+                result.Object = "No fue posible actualizar la direccion :c";
+            }
+            redirectAttributes.addFlashAttribute("resultEditAddress", result);
+            return "redirect:/usuario/detail/"+usuario.getIdUsuario();
+        }
+    }
 //    
 //    @GetMapping("CargaMasiva")
 //    public String CargaMsiva(){

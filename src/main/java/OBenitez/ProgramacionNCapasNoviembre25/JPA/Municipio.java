@@ -16,39 +16,39 @@ public class Municipio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idmunicipio")
-    private int IdMunicipio;
+    private int idMunicipio;
     
     @Column(name = "nombre")
-    private String Nombre;
+    private String nombre;
     
     @ManyToOne
     @JoinColumn(name = "idestado")
-    public Estado Estado;
+    public Estado estado;
     
     //GETTERS Y SETTERS
 
     public int getIdMunicipio() {
-        return IdMunicipio;
+        return idMunicipio;
     }
 
-    public void setIdMunicipio(int IdMunicipio) {
-        this.IdMunicipio = IdMunicipio;
+    public void setIdMunicipio(int idMunicipio) {
+        this.idMunicipio = idMunicipio;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Estado getEstado() {
-        return Estado;
+        return estado;
     }
 
-    public void setEstado(Estado Estado) {
-        this.Estado = Estado;
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
-    
+
 }

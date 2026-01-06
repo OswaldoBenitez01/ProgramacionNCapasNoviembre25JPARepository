@@ -16,73 +16,73 @@ public class Direccion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iddireccion")
-    private int IdDireccion;
+    private int idDireccion;
     
     @Column(name = "calle")
-    private String Calle;
+    private String calle;
     
     @Column(name = "numerointerior")
-    private String NumeroInterior;
+    private String numeroInterior;
     
     @Column(name = "numeroexterior")
-    private String NumeroExterior;
+    private String numeroExterior;
     
     @ManyToOne
     @JoinColumn(name = "idcolonia")
-    public Colonia Colonia;
+    public Colonia colonia;
     
     @ManyToOne
     @JoinColumn(name = "idusuario")
-    public Usuario Usuario;
+    public Usuario usuario;
     
     //GETTERS Y SETTERS
 
     public int getIdDireccion() {
-        return IdDireccion;
+        return idDireccion;
     }
 
-    public void setIdDireccion(int IdDireccion) {
-        this.IdDireccion = IdDireccion;
+    public void setIdDireccion(int idDireccion) {
+        this.idDireccion = idDireccion;
     }
 
     public String getCalle() {
-        return Calle;
+        return calle;
     }
 
-    public void setCalle(String Calle) {
-        this.Calle = Calle;
+    public void setCalle(String calle) {
+        this.calle = calle;
     }
 
     public String getNumeroInterior() {
-        return NumeroInterior;
+        return numeroInterior;
     }
 
-    public void setNumeroInterior(String NumeroInterior) {
-        this.NumeroInterior = NumeroInterior;
+    public void setNumeroInterior(String numeroInterior) {
+        this.numeroInterior = numeroInterior;
     }
 
     public String getNumeroExterior() {
-        return NumeroExterior;
+        return numeroExterior;
     }
 
-    public void setNumeroExterior(String NumeroExterior) {
-        this.NumeroExterior = NumeroExterior;
+    public void setNumeroExterior(String numeroExterior) {
+        this.numeroExterior = numeroExterior;
     }
 
     public Colonia getColonia() {
-        return Colonia;
+        return colonia;
     }
 
-    public void setColonia(Colonia Colonia) {
-        this.Colonia = Colonia;
+    public void setColonia(Colonia colonia) {
+        this.colonia = colonia;
     }
 
     public Usuario getUsuario() {
-        return Usuario;
+        return usuario;
     }
 
-    public void setUsuario(Usuario Usuario) {
-        this.Usuario = Usuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
-    
+
 }

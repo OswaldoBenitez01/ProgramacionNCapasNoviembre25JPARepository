@@ -15,27 +15,27 @@ public class Pais {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idpais")
-    private int IdPais;
+    private int idPais;
     
     @Column(name = "nombre")
-    private String Nombre;
+    private String nombre;
     
     //GETTERS Y SETTERS
 
     public int getIdPais() {
-        return IdPais;
+        return idPais;
     }
 
-    public void setIdPais(int IdPais) {
-        this.IdPais = IdPais;
+    public void setIdPais(int idPais) {
+        this.idPais = idPais;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
     
 }

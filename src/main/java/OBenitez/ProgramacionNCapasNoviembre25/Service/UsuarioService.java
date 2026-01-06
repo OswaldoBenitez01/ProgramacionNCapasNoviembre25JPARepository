@@ -26,7 +26,7 @@ public class UsuarioService {
         Result result = new Result();
         
         try {
-            List<Usuario> usuarios = usuarioRepository.findAll();
+            List<Usuario> usuarios = usuarioRepository.findAllByOrderByIdUsuarioAsc();
             if (usuarios.isEmpty() || usuarios == null) {
                 result.Correct = false;
                 result.ErrorMessage = "No se encontraron los usuarios";
@@ -100,7 +100,7 @@ public class UsuarioService {
             if (usuario.getDirecciones() != null && !usuario.getDirecciones().isEmpty()) {
                 for (Direccion direccion : usuario.getDirecciones()) {
                     direccion.setUsuario(usuario);
-                    if (direccion.Colonia != null && direccion.Colonia.getIdColonia() != 0) {
+                    if (direccion.colonia != null && direccion.colonia.getIdColonia() != 0) {
                         Colonia coloniadb = coloniaRepository.findById(direccion.getColonia().getIdColonia()).orElse(null);
                         direccion.setColonia(coloniadb);
                     }
@@ -117,6 +117,31 @@ public class UsuarioService {
     }
     
     // ===================== UPDATE ====================
+    public Result UpdateUser(Usuario usuario) {
+        Result result = new Result();
+        
+        try {
+            Optional<Usuario> usuarioDB = usuarioRepository.findById(usuario.getIdUsuario());
+            
+            if (usuarioDB == null) {
+                result.Correct = false;
+                result.ErrorMessage = "Usuario no encontrado";
+                return result;
+            }
+
+            usuario.direcciones = usuarioDB.get().direcciones;
+            usuario.setImagen(usuarioDB.get().getImagen());
+            usuarioRepository.save(usuario);
+            
+            result.Correct = true;
+        } catch (Exception ex) {
+            result.Correct = false;
+            result.ErrorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        return result;
+    }
+    
     public Result UpdateStatus(Integer IdUsuario, Integer Status){
         Result result = new Result();
 

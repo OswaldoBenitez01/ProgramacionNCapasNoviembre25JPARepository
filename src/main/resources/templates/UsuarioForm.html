@@ -11,7 +11,7 @@
     <body class="container my-5">
         <h3 class="mb-4 text-center">Registro de Usuario</h3>
         
-        <a th:href="@{/Usuario}" class="btn btn-outline-secondary mb-4">
+        <a th:href="@{/usuario}" class="btn btn-outline-secondary mb-4">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
         
@@ -530,7 +530,7 @@
                     console.log("El select pais tiene un valor de " + $('#ddlpais').val());
                     $("#ddlpais").addClass("is-valid");
                     $.ajax({
-                        url: "/Usuario/getEstadosByPais/" + $("#ddlpais").val(),
+                        url: "/usuario/getEstadosByPais/" + $("#ddlpais").val(),
                         method: 'GET',
                         dataType: 'json',
                         success: function (data, textStatus, jqXHR) {
@@ -559,7 +559,7 @@
                         $("#ddlestado").append("<option value=0 selected>Selecciona un Estado</option>");
                     } else {
                         $.ajax({
-                            url: "/Usuario/getEstadosByPais/" + $("#ddlpais").val(),
+                            url: "/usuario/getEstadosByPais/" + $("#ddlpais").val(),
                             method: 'GET',
                             dataType: 'json',
                             success: function (data, textStatus, jqXHR) {
@@ -585,7 +585,7 @@
                         $("#ddlmunicipio").append("<option value=0 selected>Selecciona un Municipio</option>");
                     } else {
                         $.ajax({
-                            url: "/Usuario/getMunicipiosByEstado/" + $("#ddlestado").val(),
+                            url: "/usuario/getMunicipiosByEstado/" + $("#ddlestado").val(),
                             method: 'GET',
                             dataType: 'json',
                             success: function (data, textStatus, jqXHR) {
@@ -611,7 +611,7 @@
                         $("#ddlcolonia").append("<option value=0 selected>Selecciona una Colonia</option>");
                     } else {
                         $.ajax({
-                            url: "/Usuario/getColoniasByMunicipio/" + $("#ddlmunicipio").val(),
+                            url: "/usuario/getColoniasByMunicipio/" + $("#ddlmunicipio").val(),
                             method: 'GET',
                             dataType: 'json',
                             success: function (data, textStatus, jqXHR) {
