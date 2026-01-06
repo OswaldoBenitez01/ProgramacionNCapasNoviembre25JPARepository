@@ -19,7 +19,7 @@
                 <a th:href="@{/usuario/form}" class="btn btn-success">
                     <i class="bi bi-person-plus-fill"></i> Agregar Usuario
                 </a>
-                <a th:href="@{/usuario/CargaMasiva}" class="btn btn-primary">
+                <a th:href="@{/usuario/cargaMasiva}" class="btn btn-primary">
                     <i class="bi bi-file-earmark-arrow-up"></i> Cargar archivo
                 </a>
             </div>
@@ -113,10 +113,10 @@
                         <td>
                             <div class="fw-bold text-dark mb-1">
                                 <span class="badge bg-primary">ID: <span th:text="${usuario.IdUsuario}"></span></span>
-                                <span class="badge usuario-status-badge" 
+<!--                                <span class="badge usuario-status-badge" 
                                       th:classappend="${usuario.Status == 1} ? 'bg-info' : 'bg-danger'">
                                     Status <span th:text="${usuario.Status}"></span>
-                                </span>
+                                </span>-->
                                 <br>
                                 <span th:text="|${usuario.Nombre} ${usuario.ApellidoPaterno} ${usuario.ApellidoMaterno}|"></span>
                             </div>

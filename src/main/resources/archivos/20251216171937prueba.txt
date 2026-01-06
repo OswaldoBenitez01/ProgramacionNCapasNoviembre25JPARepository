@@ -1,2 +1,0 @@
-Username | Nombre | APaterno | AMaterno | Email | Password | Nacimiento | Sexo | Telefono | Celular | Curp | IDROl | Calle | NExterior | NInterior | idColonia
-bodoque77|Juan|Carlos|Bodoque|bodoque@gmail.com|Pass123$|1971-11-15|H|5512345678|5512345678|MALJ980515HDFLPN01|3|Avenida Texto|Mz.1|Lt.4|1422

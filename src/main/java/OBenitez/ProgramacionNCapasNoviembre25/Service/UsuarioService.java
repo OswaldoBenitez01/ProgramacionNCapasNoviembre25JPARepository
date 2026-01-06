@@ -2,6 +2,7 @@
 package OBenitez.ProgramacionNCapasNoviembre25.Service;
 
 import OBenitez.ProgramacionNCapasNoviembre25.DAO.IColonia;
+import OBenitez.ProgramacionNCapasNoviembre25.DAO.IDireccion;
 import OBenitez.ProgramacionNCapasNoviembre25.DAO.IUsuarioJPA;
 import OBenitez.ProgramacionNCapasNoviembre25.JPA.Colonia;
 import OBenitez.ProgramacionNCapasNoviembre25.JPA.Direccion;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
     @Autowired
     private IUsuarioJPA usuarioRepository;
+    @Autowired
+    private IDireccion direccionRepository;
     @Autowired
     private IColonia coloniaRepository;
     
@@ -111,6 +114,32 @@ public class UsuarioService {
         } catch (Exception ex) {
             result.Correct = false;
             result.ErrorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        return result;
+    }
+    
+    public Result AddAll(List<Usuario> usuarios){
+        Result result = new Result();
+        
+        try {
+            for (Usuario usuarioNuevo : usuarios) {
+                Direccion direccionNueva = new Direccion();
+                direccionNueva = usuarioNuevo.direcciones.get(0);
+                usuarioNuevo.direcciones = null;
+                usuarioNuevo.setStatus(1);
+                usuarioRepository.saveAndFlush(usuarioNuevo);
+                
+                direccionNueva.usuario = new Usuario();
+                direccionNueva.usuario.setIdUsuario(usuarioNuevo.getIdUsuario());
+                direccionRepository.save(direccionNueva);
+            }
+//            usuarioRepository.saveAll(usuarios);
+            result.Correct = true;
+        } catch (Exception ex) {
+            result.Correct = false;
+            result.ErrorMessage = ex.getLocalizedMessage();
+            result.ErrorMessage = ex.getMessage();
             result.ex = ex;
         }
         return result;

@@ -1,373 +1,422 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Registro de Usuario</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    </head>
-    <body class="container my-5">
-        <h3 class="mb-4 text-center">Registro de Usuario</h3>
+    <title>Registro de Usuario</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-title h4 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .section-title i {
+            margin-right: 8px;
+        }
+
+        .photo-upload-container {
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        .photo-upload-container:hover {
+            border-color: #6c757d;
+            background-color: #e9ecef;
+        }
+
+        .photo-upload-container i {
+            font-size: 3rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+        .btn-submit {
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .form-section {
+                padding: 20px 15px;
+            }
+
+            .section-title h4 {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .form-section {
+                padding: 15px 10px;
+                margin-bottom: 15px;
+            }
+
+            .section-title {
+                margin-bottom: 15px;
+            }
+
+            .photo-upload-container {
+                padding: 15px;
+            }
+
+            .photo-upload-container i {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid main-container my-4 px-3 px-md-4">
         
-        <a th:href="@{/usuario}" class="btn btn-outline-secondary mb-4">
-            <i class="bi bi-arrow-left"></i> Volver
-        </a>
-        
-        <form id="formUsuario"  method="post" th:object="${Usuario}" th:action="@{add}" enctype="multipart/form-data">
+        <div class="d-flex justify-content-between align-items-center pb-2">
+            <h3 class="text-center">Registro de Usuario</h3>
+            <a th:href="@{/usuario}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+
+        <form id="formUsuario" method="post" th:object="${Usuario}" th:action="@{add}" enctype="multipart/form-data">
             
             <input type="hidden" th:field="*{IdUsuario}">
             <input type="hidden" th:field="*{Direcciones[0].IdDireccion}">
             
-            <!-- ================ INFORMACION BASICA ====================== -->
-            <div class="mb-4" 
+            <!-- INFORMACIÓN BÁSICA -->
+            <div class="form-section" 
                  th:if="${(Usuario.IdUsuario == 0 && Usuario.Direcciones[0].IdDireccion == 0) 
                  || (Usuario.IdUsuario > 0 && Usuario.Direcciones[0].IdDireccion == -1)}">
                 
-                <div class="mb-4">
-                    <h4 class="border-bottom pb-2 mb-4">
-                        <i class="bi bi-person-fill text-primary"></i> Información Basica
+                <div class="section-title">
+                    <h4>
+                        <i class="bi bi-person-fill text-primary"></i> Información Básica
                     </h4>
                 </div>
 
-                <div class="row">
-                    <div class="col">
-                        <input type="file" class="form-control" name="imagenUsuario">
-                    </div>
-                </div>
-                
-                <div class="row"> <!-- Nombre Usuario-->
-                    <div class="col-md-4 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="nombreInput"
-                                th:field="*{Nombre}"
-                                placeholder="Tu nombre"
-                                onkeypress="LetrasConAcentos(event, this)"
-                                oncopy="return false" onpaste="return false">
-                            <label for="nombreInput"><i class="bi bi-person-fill ms-1"></i>&nbsp;&nbsp;Nombre</label>   
+                <div class="row g-3">
+                    <div class="col-lg-3 col-md-4 mb-3 mb-lg-0">
+                        <div class="photo-upload-container text-center">
+                            <i class="bi bi-camera-fill"></i>
+                            <p class="mb-2 small">Foto de perfil</p>
+
+                            <input type="file" class="form-control form-control-sm" 
+                                   name="imagenUsuario" accept="image/*" id="imagenUsuario">
+
+                            <img id="previewImagen" 
+                                 src="" 
+                                 alt="Vista previa" 
+                                 class="img-fluid mt-2 d-none rounded" 
+                                 style="max-height: 200px;">
                         </div>
-                        <span class="text-danger" th:if="${#fields.hasErrors('Nombre')}" th:errors="${Usuario.Nombre}" ></span>
-                        <span class="error-message"></span>
                     </div>
 
-                    <div class="col-md-4 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="apellidoPaternoInput"
-                                th:field="*{ApellidoPaterno}"
-                                placeholder="Tu apellido paterno"
-                                onkeypress="LetrasConAcentos(event, this)"
-                                oncopy="return false" onpaste="return false">
-                            <label for="apellidoPaternoInput"><i class="bi bi-person ms-1"></i>&nbsp;&nbsp;Apellido Paterno</label>   
+                    <div class="col-lg-9 col-md-8">
+                        <!-- Nombre -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="nombreInput"
+                                           th:field="*{Nombre}" placeholder="Nombre"
+                                           onkeypress="LetrasConAcentos(event, this)"
+                                           oncopy="return false" onpaste="return false">
+                                    <label for="nombreInput"><i class="bi bi-person-fill"></i> Nombre</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('Nombre')}" th:errors="${Usuario.Nombre}"></span>
+                                <span class="error-message"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="apellidoPaternoInput"
+                                           th:field="*{ApellidoPaterno}" placeholder="Apellido Paterno"
+                                           onkeypress="LetrasConAcentos(event, this)"
+                                           oncopy="return false" onpaste="return false">
+                                    <label for="apellidoPaternoInput"><i class="bi bi-person"></i> Apellido Paterno</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('ApellidoPaterno')}" th:errors="${Usuario.ApellidoPaterno}"></span>
+                                <span class="error-message"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="apellidoMaternoInput"
+                                           th:field="*{ApellidoMaterno}" placeholder="Apellido Materno"
+                                           onkeypress="LetrasConAcentos(event, this)"
+                                           oncopy="return false" onpaste="return false">
+                                    <label for="apellidoMaternoInput"><i class="bi bi-person"></i> Apellido Materno</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('ApellidoMaterno')}" th:errors="${Usuario.ApellidoMaterno}"></span>
+                                <span class="error-message"></span>
+                            </div>
                         </div>
 
-                        <span class="text-danger" th:if="${#fields.hasErrors('ApellidoPaterno')}" th:errors="${Usuario.ApellidoPaterno}" ></span>
-                        <span class="error-message"></span>
-                    </div>
+                        <!-- CURP, Fecha y Género -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="curpInput"
+                                           th:field="*{Curp}" placeholder="CURP"
+                                           maxlength="18" onblur="CurpValidate(event, this)">
+                                    <label for="curpInput"><i class="bi bi-card-text"></i> CURP</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('Curp')}" th:errors="${Usuario.Curp}"></span>
+                                <span class="error-message"></span>
+                            </div>
 
-                    <div class="col-md-4 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="apellidoMaternoInput"
-                                th:field="*{ApellidoMaterno}"
-                                placeholder="Tu apellido materno"
-                                onkeypress="LetrasConAcentos(event, this)"
-                                oncopy="return false" onpaste="return false">
-                            <label for="apellidoMaternoInput"><i class="bi bi-person ms-1"></i>&nbsp;&nbsp;Apellido Materno</label>   
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="fechaNacimientoInput"
+                                           th:field="*{FechaNacimiento}" placeholder="Fecha"
+                                           onchange="FechaValidate(event, this)">
+                                    <label for="fechaNacimientoInput"><i class="bi bi-calendar-event"></i> Fecha Nacimiento</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('FechaNacimiento')}" th:errors="${Usuario.FechaNacimiento}"></span>
+                                <span class="error-message"></span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <select class="form-select" id="sexoSelect" th:field="*{Sexo}">
+                                        <option value="N">Selecciona</option>
+                                        <option value="H">Hombre</option>
+                                        <option value="M">Mujer</option>
+                                        <option value="N">No definido</option>
+                                    </select>
+                                    <label for="sexoSelect"><i class="bi bi-gender-ambiguous"></i> Género</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('Sexo')}" th:errors="${Usuario.Sexo}"></span>
+                                <span class="error-message"></span>
+                            </div>
                         </div>
 
-                        <span class="text-danger" th:if="${#fields.hasErrors('ApellidoMaterno')}" th:errors="${Usuario.ApellidoMaterno}" ></span>
-                        <span class="error-message"></span>
-                    </div>
-                </div>
+                        <!-- Usuario, Rol y Email -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="usernameInput"
+                                           th:field="*{Username}" placeholder="Usuario"
+                                           onblur="UsernameValidate(event, this)">
+                                    <label for="usernameInput"><i class="bi bi-person-circle"></i> Usuario</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('Username')}" th:errors="${Usuario.Username}"></span>
+                                <span class="error-message"></span>
+                            </div>
 
-                <div class="row"> <!--Fecha, Genero y CURP-->
-                    <div class="col-md-6 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="curpInput"
-                                th:field="*{Curp}"
-                                placeholder="GOAR950815HDFRML09"
-                                maxlength="18"
-                                onblur="CurpValidate(event, this)">
-                            <label for="curpInput"><i class="bi bi-card-text"></i>&nbsp;&nbsp;CURP</label>   
-                        </div>
-                        <span class="text-danger" th:if="${#fields.hasErrors('Curp')}" th:errors="${Usuario.Curp}" ></span>
-                        <span class="error-message"></span>
-                    </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <select class="form-select" id="rolSelect"
+                                            th:field="*{rol.IdRol}"
+                                            onblur="SelectValidate(event, this)">
+                                        <option value="0">Selecciona puesto</option>
+                                        <option th:each="rol : ${Roles}"
+                                                th:text="${rol.Nombre}"
+                                                th:value="${rol.IdRol}"></option>
+                                    </select>
+                                    <label for="rolSelect"><i class="bi bi-briefcase"></i> Puesto</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('rol.IdRol')}"></span>
+                                <span class="error-message"></span>
+                            </div>
 
-                    <div class="col-md-3 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="date"
-                                class="form-control"
-                                id="fechaNacimientoInput"
-                                th:field="*{FechaNacimiento}"
-                                placeholder="Tu fecha de nacimiento"
-                                onchange="FechaValidate(event, this)">
-                            <label for="fechaNacimientoInput"><i class="bi bi-calendar-event ms-1"></i>&nbsp;&nbsp;Fecha de Nacimiento</label>   
-                        </div>
-
-                        <span class="text-danger" th:if="${#fields.hasErrors('FechaNacimiento')}" th:errors="${Usuario.FechaNacimiento}" ></span>
-                        <span class="error-message"></span>
-                    </div>
-
-                    <div class="col-md-3 mb-4">
-                        <div class="form-floating">
-                            <select
-                                class="form-select"
-                                id="sexoSelect"
-                                th:field="*{Sexo}">
-                                <option value="N">Selecciona una opcion</option>
-                                <option value="H">Hombre</option>
-                                <option value="M">Mujer</option>
-                                <option value="N">No definido</option>
-                            </select>
-                            <label for="sexoSelect"><i class="bi bi-gender-ambiguous ms-1"></i>&nbsp;&nbsp;Genero</label>   
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control" id="emailInput"
+                                           th:field="*{Email}" placeholder="Email"
+                                           onblur="EmailValidate(event, this)">
+                                    <label for="emailInput"><i class="bi bi-envelope-fill"></i> Correo Electrónico</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('Email')}" th:errors="${Usuario.Email}"></span>
+                                <span class="error-message"></span>
+                            </div>
                         </div>
 
-                        <span class="text-danger" th:if="${#fields.hasErrors('Sexo')}" th:errors="${Usuario.Sexo}" ></span>
-                        <span class="error-message"></span>
-                    </div>
-                </div>
+                        <!-- Teléfonos y Contraseña -->
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="tel" class="form-control" id="telefonoInput"
+                                           th:field="*{Telefono}" placeholder="Teléfono"
+                                           maxlength="10" onblur="PhoneValidate(event, this)">
+                                    <label for="telefonoInput"><i class="bi bi-telephone-fill"></i> Teléfono</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('Telefono')}" th:errors="${Usuario.Telefono}"></span>
+                                <span class="error-message"></span>
+                            </div>
 
-                <div class="row"> <!--Usuario, Rol y Correo-->
-                    <div class="col-md-3 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="usernameInput"
-                                th:field="*{Username}"
-                                placeholder="tunombre123"
-                                onblur="UsernameValidate(event, this)">
-                            <label for="usernameInput"><i class="bi bi-person-circle ms-1"></i>&nbsp;&nbsp;Username</label>   
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="tel" class="form-control" id="celularInput"
+                                           th:field="*{Celular}" placeholder="Celular"
+                                           maxlength="10" onblur="PhoneValidate(event, this)">
+                                    <label for="celularInput"><i class="bi bi-phone-fill"></i> Celular</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('Celular')}" th:errors="${Usuario.Celular}"></span>
+                                <span class="error-message"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="passwordInput"
+                                           th:field="*{Password}" placeholder="Contraseña"
+                                           onblur="PasswordValidate(event, this)"
+                                           oncopy="return false" onpaste="return false">
+                                    <label for="passwordInput"><i class="bi bi-shield-lock-fill"></i> Contraseña</label>
+                                </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('Password')}" th:errors="${Usuario.Password}"></span>
+                                <span class="error-message"></span>
+                            </div>
                         </div>
-                        <span class="text-danger" th:if="${#fields.hasErrors('Username')}" th:errors="${Usuario.Username}" ></span>
-                        <span class="error-message"></span>
-                    </div>
-
-                    <div class="col-md-3 mb-4">
-                        <div class="form-floating">
-                            <select
-                                class="form-select"
-                                id="rolSelect"
-                                th:field="*{rol.IdRol}"
-                                onblur="SelectValidate(event, this)">
-                                <option value=0 selected> Selecciona un puesto</option>
-                                <option th:each="rol : ${Roles}"
-                                        th:text="${rol.Nombre}"
-                                        th:value="${rol.IdRol}"></option>
-                            </select>
-                            <label for="rolSelect"><i class="bi bi-briefcase ms-1"></i>&nbsp;&nbsp;Puesto</label>   
-                        </div>
-
-                        <span class="text-danger" th:if="${#fields.hasErrors('rol.IdRol')}" th:errors="${Usuario.FechaNacimiento}" ></span>
-                        <span class="error-message"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="email"
-                                class="form-control"
-                                id="emailInput"
-                                th:field="*{Email}"
-                                placeholder="ejemplo@gmail.com"
-                                onblur="EmailValidate(event, this)">
-                            <label for="emailInput"><i class="bi bi-envelope-fill ms-1"></i>&nbsp;&nbsp;Correo Electronico</label>   
-                        </div>
-
-                        <span class="text-danger" th:if="${#fields.hasErrors('Email')}" th:errors="${Usuario.Email}" ></span>
-                        <span class="error-message"></span>
-                    </div>
-                </div>
-
-                <div class="row"> <!--Telefono, Celular y Password-->
-                    <div class="col-md-3 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="tel"
-                                class="form-control"
-                                id="telefonoInput"
-                                th:field="*{Telefono}"
-                                placeholder="5512345678"
-                                maxlength="10"
-                                onblur="PhoneValidate(event, this)">
-                            <label for="telefonoInput"><i class="bi bi-telephone-fill ms-1"></i>&nbsp;&nbsp;Telefono</label>   
-                        </div>
-                        <span class="text-danger" th:if="${#fields.hasErrors('Telefono')}" th:errors="${Usuario.Telefono}" ></span>
-                        <span class="error-message"></span>
-                    </div>
-
-                    <div class="col-md-3 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="tel"
-                                class="form-control"
-                                id="celularInput"
-                                th:field="*{Celular}"
-                                placeholder="5587654321"
-                                maxlength="10"
-                                onblur="PhoneValidate(event, this)">
-                            <label for="celularInput"><i class="bi bi-phone-fill ms-1"></i>&nbsp;&nbsp;Celular</label>   
-                        </div>
-                        <span class="text-danger" th:if="${#fields.hasErrors('Celular')}" th:errors="${Usuario.Celular}" ></span>
-                        <span class="error-message"></span>
-                    </div>
-
-                    <div class="col-md-6 mb-4">
-                        <div class="form-floating">
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="passwordInput"
-                                th:field="*{Password}"
-                                placeholder="Contraseña$123"
-                                onblur="PasswordValidate(event, this)"
-                                oncopy="return false" onpaste="return false">
-                            <label for="passwordInput"><i class="bi bi-shield-lock-fill ms-1"></i>&nbsp;&nbsp;Contraseña</label>   
-                        </div>
-
-                        <span class="text-danger" th:if="${#fields.hasErrors('Password')}" th:errors="${Usuario.Password}" ></span>
-                        <span class="error-message"></span>
                     </div>
                 </div>
             </div>
             
-            <!-- ================== DIRECCION ================== -->
-            <div class="mb-4"
+            <!-- DIRECCIÓN -->
+            <div class="form-section"
                  th:if="${(Usuario.IdUsuario == 0 && Usuario.Direcciones[0].IdDireccion == 0) 
                      || (Usuario.IdUsuario != 0 && Usuario.Direcciones[0].IdDireccion > 0) 
                      || (Usuario.IdUsuario != 0 && Usuario.Direcciones[0].IdDireccion == 0)}">
-                <div class="mb-4">
-                    <h4 class="border-bottom pb-2 mb-4">
+                
+                <div class="section-title">
+                    <h4>
                         <i class="bi bi-geo-alt-fill text-danger"></i> Dirección
                     </h4>
                 </div>
 
-                <!-- ============ DDL ==============-->
-                <div class="row"> <!--Pais y Estado-->
-                    <div class="col-md-6 mb-3">
+                <!-- País y Estado -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
                         <div class="form-floating">
-                            <select id="ddlpais" 
-                                    class="form-select" 
+                            <select id="ddlpais" class="form-select"
                                     onblur="SelectValidate(event, this)"
                                     th:field="${Usuario.Direcciones[0].Colonia.Municipio.Estado.Pais.IdPais}">
-                                <option value=0 selected>Selecciona un Pais</option>
-                                <option th:each="pais : ${Paises}" 
-                                        th:text="${pais.Nombre}" 
+                                <option value="0">Selecciona un País</option>
+                                <option th:each="pais : ${Paises}"
+                                        th:text="${pais.Nombre}"
                                         th:value="${pais.IdPais}"></option>
                             </select>
-                            <label for="ddlpais"><i class="bi bi-globe-americas ms-1"></i>&nbsp;&nbsp;Pais</label>
+                            <label for="ddlpais"><i class="bi bi-globe-americas"></i> País</label>
                         </div>
                         <span class="error-message"></span>
                     </div>
-                    <div class="col-md-6 mb-3">
+
+                    <div class="col-md-6">
                         <div class="form-floating">
-                            <select id="ddlestado" 
-                                    class="form-select" 
+                            <select id="ddlestado" class="form-select"
                                     onblur="SelectValidate(event, this)"
                                     th:field="${Usuario.Direcciones[0].Colonia.Municipio.Estado.IdEstado}">
-                                <option value=0>Selecciona un Estado</option>
+                                <option value="0">Selecciona un Estado</option>
                             </select>
-                            <label for="ddlestado"><i class="bi bi-geo-alt ms-1"></i>&nbsp;&nbsp;Estado</label>
+                            <label for="ddlestado"><i class="bi bi-geo-alt"></i> Estado</label>
                         </div>
                         <span class="error-message"></span>
                     </div>
                 </div>
-                
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+
+                <!-- Municipio y Colonia -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
                         <div class="form-floating">
-                            <select id="ddlmunicipio" 
-                                    class="form-select" 
+                            <select id="ddlmunicipio" class="form-select"
                                     onblur="SelectValidate(event, this)"
                                     th:field="${Usuario.Direcciones[0].Colonia.Municipio.IdMunicipio}">
-                                <option value=0>Selecciona un Municipio</option>
+                                <option value="0">Selecciona un Municipio</option>
                             </select>
-                            <label for="ddlmunicipio"><i class="bi bi-map ms-1"></i>&nbsp;&nbsp;Municipio</label>
+                            <label for="ddlmunicipio"><i class="bi bi-map"></i> Municipio</label>
                         </div>
                         <span class="error-message"></span>
                     </div>
-                    <div class="col-md-6 mb-3">
+
+                    <div class="col-md-6">
                         <div class="form-floating">
-                            <select id="ddlcolonia" 
-                                    class="form-select" 
+                            <select id="ddlcolonia" class="form-select"
                                     onblur="SelectValidate(event, this)"
                                     th:field="*{Direcciones[0].Colonia.IdColonia}">
-                                <option value=0>Selecciona una Colonia</option>
+                                <option value="0">Selecciona una Colonia</option>
                             </select>
-                            <label for="ddlcolonia"><i class="bi bi-house-down ms-1"></i>&nbsp;&nbsp;Colonia</label>
+                            <label for="ddlcolonia"><i class="bi bi-house-down"></i> Colonia</label>
                         </div>
                         <span class="error-message"></span>
                     </div>
                 </div>
-                
-                <!-- ============ CALLE ============ -->
-                <div class="row">
-                    <div class="col-md-8 mb-3">
+
+                <!-- Calle y Código Postal -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
                         <div class="form-floating">
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="calleInput"
-                                   th:field="*{Direcciones[0].Calle}"
-                                   placeholder="Av. Insurgentes">
-                            <label for="calleInput"><i class="bi bi-signpost ms-1"></i>&nbsp;&nbsp;Calle</label>
+                            <input type="text" class="form-control" id="calleInput"
+                                   th:field="*{Direcciones[0].Calle}" placeholder="Calle">
+                            <label for="calleInput"><i class="bi bi-signpost"></i> Calle</label>
                         </div>
-                        <span class="text-danger" th:if="${#fields.hasErrors('Direcciones[0].Calle')}" th:errors="${Usuario.Direcciones[0].Calle}" ></span>
+                        <span class="text-danger" th:if="${#fields.hasErrors('Direcciones[0].Calle')}" th:errors="${Usuario.Direcciones[0].Calle}"></span>
                     </div>
-                    <div class="col-md-4 mb-3">
+
+                    <div class="col-md-4">
                         <div class="form-floating">
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="codigoPostalInput"
+                            <input type="text" class="form-control" id="codigoPostalInput"
                                    th:field="*{Direcciones[0].Colonia.CodigoPostal}"
-                                   placeholder="03100"
-                                   maxlength="5"
-                                   disabled>
-                            <label for="codigoPostalInput"><i class="bi bi-mailbox ms-1"></i>&nbsp;&nbsp;Codigo Postal</label>
+                                   placeholder="C.P." maxlength="5" disabled>
+                            <label for="codigoPostalInput"><i class="bi bi-mailbox"></i> Código Postal</label>
                         </div>
-                        <span class="text-danger" th:if="${#fields.hasErrors('Direcciones[0].Calle')}" th:errors="${Usuario.Direcciones[0].Calle}" ></span>
                     </div>
                 </div>
-                
-                <div class="row"> <!-- Numero Exterior e Interior-->
-                    <div class="col-md-6 mb-3">
+
+                <!-- Números Exterior e Interior -->
+                <div class="row g-3">
+                    <div class="col-md-6">
                         <div class="form-floating">
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="numeroExteriorInput"
-                                   th:field="*{Direcciones[0].NumeroInterior}"
-                                   placeholder="Mt. Piso. Num." >
-                           <label for="numeroExteriorInput"><i class="bi bi-signpost-split ms-1"></i>&nbsp;&nbsp;Numero Exterior</label>
+                            <input type="text" class="form-control" id="numeroExteriorInput"
+                                   th:field="*{Direcciones[0].NumeroExterior}" placeholder="Núm. Ext.">
+                            <label for="numeroExteriorInput"><i class="bi bi-signpost-split"></i> Número Exterior</label>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+
+                    <div class="col-md-6">
                         <div class="form-floating">
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="numeroInteriorInput"
-                                   th:field="*{Direcciones[0].NumeroExterior}"
-                                   placeholder="Numero Exterior">
-                            <label for="numeroInteriorInput"><i class="bi bi-signpost-split ms-1"></i>&nbsp;&nbsp;Numero Interior</label>
+                            <input type="text" class="form-control" id="numeroInteriorInput"
+                                   th:field="*{Direcciones[0].NumeroInterior}" placeholder="Núm. Int.">
+                            <label for="numeroInteriorInput"><i class="bi bi-signpost-split"></i> Número Interior</label>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <button type="submit" class="btn btn-lg btn-success w-100 fw-bold">Agregar Usuario</button>
+
+            <button type="submit" class="btn btn-lg btn-success w-100 btn-submit">
+                <i class="bi bi-check-circle-fill"></i> Agregar Usuario
+            </button>
         </form>
+    </div>
         
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
         
@@ -378,6 +427,25 @@
                     return false;
                 }
             });
+            
+            const inputImagen = document.getElementById('imagenUsuario');
+            const preview = document.getElementById('previewImagen');
+
+            inputImagen.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.classList.remove('d-none');
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "";
+                    preview.classList.add('d-none');
+                }
+            });
+
             
             function SoloLetras(event, input){
                 let key = event.key;
@@ -522,8 +590,7 @@
                     $(input).parent().siblings(".error-message").text("Por favor selecciona una opcion").addClass("text-danger");
                 }
             }
-            
-            
+
             $(document).ready(function () {
 
                 if ($('#ddlpais').val() > 0) {
@@ -550,8 +617,7 @@
                 } else {
                     console.log("El select está vacío o solo tiene un placeholder.");
                 }
-                
-                
+
                 //DDL PAIS
                 $("#ddlpais").change(function () {
                     if ($("#ddlpais").val() == 0) {
@@ -631,8 +697,6 @@
                     }
                 });
             });
-            
-            
         </script>
     </body>
 </html>

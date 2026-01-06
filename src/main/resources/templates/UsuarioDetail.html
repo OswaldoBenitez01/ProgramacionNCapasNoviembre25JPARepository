@@ -39,9 +39,11 @@
         </style>
     </head>
     <body class="container py-5">
-        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-4">
             <h4>Informacion del Usuario</h4>
-            <a th:href="@{/usuario}" class="btn btn-secondary btn-sm">Volver</a>
+            <a th:href="@{/usuario}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
         </div>
         
         
@@ -98,11 +100,11 @@
             </button>
         </div>
         
-        <div th:if="${Usuario.Direcciones == null}" class="alert text-body-secondary small">
-            Sin direcciones registradas
+        <div th:if="${Usuario.Direcciones.isEmpty()}" class="alert alert-danger">
+            Sin direcciones registradas :c
         </div>
         
-        <ul class="list-unstyled" th:unless="${Usuario.Direcciones == null}">
+        <ul class="list-unstyled" th:unless="${Usuario.Direcciones.isEmpty()}">
             <li th:each="direccion : ${Usuario.Direcciones}">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>

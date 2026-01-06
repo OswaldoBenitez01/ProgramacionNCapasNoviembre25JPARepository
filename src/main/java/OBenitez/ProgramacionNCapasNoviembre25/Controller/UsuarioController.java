@@ -64,6 +64,8 @@ public class UsuarioController {
     private ColoniaService coloniaService;
     @Autowired
     private DireccionService direccionService;
+    @Autowired
+    private ValidationService validationService;
     
     @GetMapping
     public String GetAll(Model model){
@@ -299,243 +301,244 @@ public class UsuarioController {
             return "redirect:/usuario/detail/"+usuario.getIdUsuario();
         }
     }
-//    
-//    @GetMapping("CargaMasiva")
-//    public String CargaMsiva(){
-//        return "CargaMasiva";
-//    }
-//    
-//    @PostMapping("CargaMasiva")
-//    public String CargaMasiva(@ModelAttribute MultipartFile archivo, Model model, HttpSession sesion) throws IOException {
-//    
-//        String extension = archivo.getOriginalFilename().split("\\.")[1];
-//        
-//        String path = System.getProperty("user.dir");
-//        String pathArchivo = "src/main/resources/archivos";
-//        String fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-//        
-//        String rutaAbsoluta = path + "/" + pathArchivo + "/" + fecha + archivo.getOriginalFilename();
-//        
-//        archivo.transferTo(new File(rutaAbsoluta));
-//        
-//        List<Usuario> usuarios = new ArrayList<>();
-//        
-//        if (extension.equals("txt")) {
-//            usuarios = LecturaArchivo(new File(rutaAbsoluta));
-//        } else {
-//            usuarios = LecturaArchivoExcel(new File(rutaAbsoluta));    
-//        }
-//        
-//        List<ErrorCarga> errores = ValidarDatos(usuarios);
-//        
-//        if (errores != null && !errores.isEmpty()) {
-//            model.addAttribute("errores", errores);
-//            model.addAttribute("tieneErrores", true);
-//        } else {
-//            model.addAttribute("mensajeExito", "Carga exitosa. Se cargaron " + usuarios.size() + " usuario(s) correctamente");
-//            model.addAttribute("tieneErrores", false);
-//            
-//            sesion.setAttribute("archivoCargaMasiva", rutaAbsoluta);
-//        }
-//        
-//        return "CargaMasiva";
-//    }
-//
-//    private List<Usuario> LecturaArchivo(File archivo) {
-//        
-//        List<Usuario> usuarios = new ArrayList<>();
-//        
-//        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(archivo))){
-//            
-//            bufferedReader.readLine();
-//            String line;
-//            
-//            while ((line = bufferedReader.readLine()) != null) {                
-//                
-//                String[] datos = line.split("\\|");
-//                
-//                Usuario usuario = new Usuario();
-//                usuario.setUsername(datos[0]);
-//                usuario.setNombre(datos[1]);
-//                usuario.setApellidoPaterno(datos[2]);
-//                usuario.setApellidoMaterno(datos[3]);
-//                usuario.setEmail(datos[4]);
-//                usuario.setPassword(datos[5]);
-//                usuario.setFechaNacimiento(java.sql.Date.valueOf(datos[6]));
-//                usuario.setSexo(datos[7]);
-//                usuario.setTelefono(datos[8]);
-//                usuario.setCelular(datos[9]);
-//                usuario.setCurp(datos[10]);
-//                
-//                //Direccion
-//                usuario.Rol = new Rol();
-//                usuario.Rol.setIdRol(Integer.parseInt(datos[11]));
-//                
-//                //DIRECCION
-//                usuario.Direcciones = new ArrayList<>();
-//                Direccion Direccion = new Direccion();
-//                Direccion.setCalle(datos[12]);
-//                Direccion.setNumeroExterior(datos[13]);
-//                Direccion.setNumeroInterior(datos[14]);
-//                usuario.Direcciones.add(Direccion);
-//                
-//                Direccion.Colonia = new Colonia();
-//                Direccion.Colonia.setIdColonia(Integer.parseInt(datos[15]));
-//                
-//                usuarios.add(usuario);
-//            }
-//        }
-//        catch(Exception ex){
-//            usuarios = null;
-//        }
-//        
-//        return usuarios;
-//    }
-//
-//    private List<Usuario> LecturaArchivoExcel(File archivo) {
-//        
-//        List<Usuario> usuarios = new ArrayList<>();
-//        
-//         try (XSSFWorkbook workbook = new XSSFWorkbook(archivo)) {
-//             
-//            XSSFSheet sheet = workbook.getSheetAt(0);
-//
-//            for (Row row : sheet) {
-//                
-//                Usuario usuario = new Usuario();
-//                Cell cell0 = row.getCell(0);
-//                if (cell0 != null) {
-//                    usuario.setUsername(row.getCell(0).toString());
-//                } else {
-//                    continue;
-//                }
-//                
-//                usuario.setNombre(row.getCell(1).toString());
-//                usuario.setApellidoPaterno(row.getCell(2).toString());
-//                usuario.setApellidoMaterno(row.getCell(3).toString());
-//                usuario.setEmail(row.getCell(4).toString());
-//                usuario.setPassword(row.getCell(5).toString());
-//                
-//                java.util.Date utilDate = row.getCell(6).getDateCellValue();
-//                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-//                usuario.setFechaNacimiento(sqlDate);
-//                
-//                usuario.setSexo(row.getCell(7).toString());
-//                usuario.setCelular(row.getCell(8).toString());
-//                usuario.setTelefono(row.getCell(9).toString());
-//                usuario.setCurp(row.getCell(10).toString());
-//                
-//                usuario.Rol = new Rol();
-//                usuario.Rol.setIdRol((int) row.getCell(11).getNumericCellValue());
-//                //DIRECCION
-//                usuario.Direcciones = new ArrayList<>();
-//                Direccion Direccion = new Direccion();
-//                Direccion.setCalle(row.getCell(12).toString());
-//                Direccion.setNumeroExterior(row.getCell(13).toString());
-//                Direccion.setNumeroInterior(row.getCell(14).toString());
-//                usuario.Direcciones.add(Direccion);
-//                
-//                Direccion.Colonia = new Colonia();
-//                Direccion.Colonia.setIdColonia((int) row.getCell(15).getNumericCellValue());
-//                
-//                usuarios.add(usuario);
-//            }
-//            
-//        } catch (Exception ex) {
-//            usuarios = null;
-//        }
-//        
-//        return usuarios;
-//    }
-//    
-//    private List<ErrorCarga> ValidarDatos(List<Usuario> usuarios) {
-//        
-//        List<ErrorCarga> erroresCarga = new ArrayList<>();
-//        int LineaError = 0;
-//        
-//        for (Usuario usuario : usuarios) {
-//            LineaError++;
-//            BindingResult bindingResult = validationService.validateObjects(usuario);
-//            List<ObjectError> errors = bindingResult.getAllErrors();
-//            
-//            if (usuario.Rol == null) {
-//                usuario.Rol = new Rol();
-//            }
-//            if (usuario.Direcciones == null) {
-//                usuario.Direcciones = new ArrayList<>();
-//                Direccion Direccion = new Direccion();
-//                usuario.Direcciones.add(Direccion);
-//            }
-//            
-//            BindingResult bindingResultRol = validationService.validateObjects(usuario.Rol);
-//            List<ObjectError> errorsRol = bindingResultRol.getAllErrors();
-//            
-//            BindingResult bindingResultDireccion = validationService.validateObjects(usuario.Direcciones.get(0));
-//            List<ObjectError> errorsDireccion = bindingResultDireccion.getAllErrors();
-//            
-//            List<ObjectError> listaCombinada = new ArrayList<>(errors);
-//            
-//            if (!errorsRol.isEmpty()) { 
-//                listaCombinada.addAll(errorsRol);
-//            }
-//            if (!errorsDireccion.isEmpty()) { 
-//                listaCombinada.addAll(errorsDireccion);
-//            }
-//            
-//            for (ObjectError error : listaCombinada) {
-//                FieldError fieldError = (FieldError) error;
-//                ErrorCarga errorCarga = new ErrorCarga();
-//                errorCarga.Linea = LineaError;
-//                errorCarga.Campo = fieldError.getField();
-//                errorCarga.Descripcion = fieldError.getDefaultMessage();
-//                
-//                erroresCarga.add(errorCarga);
-//            }
-//        }
-//        
-//        return erroresCarga;
-//    }
-//    
-//    @GetMapping("CargaMasiva/procesar")
-//    public String ProcesarArchivo(HttpSession sesion, Model model, RedirectAttributes redirectAttributes){
-//    
-//        String rutaArchivo = sesion.getAttribute("archivoCargaMasiva").toString();
-//        
-//        File archivo = new File(rutaArchivo);
-//        String nombreArchivo = archivo.getName();
-//        String extension = nombreArchivo.split("\\.")[1];
-//        List<Usuario> usuarios = new ArrayList<>();
-//        
-//        if (extension.equals("txt")) {
-//            usuarios = LecturaArchivo(archivo);
-//        } else {
-//            usuarios = LecturaArchivoExcel(archivo);  
-//        }
-//        
-//        if (usuarios != null && !usuarios.isEmpty()) {
-//            
-//            List<OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario> usuariosJPA = new ArrayList<>();
-//            for (Usuario usuario : usuarios) {
-//                ModelMapper modelMapper = new ModelMapper();
-//                OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioJPA = modelMapper.map(usuario, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class);
-//                usuariosJPA.add(usuarioJPA);
-//            }
-//            
-//            Result result = usuarioJPADAOImplementation.AddAll(usuariosJPA);
-//            sesion.removeAttribute("archivoCargaMasiva");
-//            
-//            if(result.Correct){
-//                result.Object = "Se agregó " + usuarios.size() + " usuario(s) nuevo(s)";
-//            } else{
-//                result.Object = "No fue posible agregar a los usuarios :c";
-//            }
-//            redirectAttributes.addFlashAttribute("resultCargaMasiva", result);
-//            
-//            return "redirect:/Usuario";
-//        } else {
-//            
-//            return "redirect:/Usuario/CargaMasiva";
-//        }
-//    }
+    
+    @GetMapping("cargaMasiva")
+    public String CargaMsiva(){
+        return "CargaMasiva";
+    }
+    
+    @PostMapping("CargaMasiva")
+    public String CargaMasiva(@ModelAttribute MultipartFile archivo, Model model, HttpSession sesion) throws IOException {
+    
+        String extension = archivo.getOriginalFilename().split("\\.")[1];
+        
+        String path = System.getProperty("user.dir");
+        String pathArchivo = "src/main/resources/archivos";
+        String fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        
+        String rutaAbsoluta = path + "/" + pathArchivo + "/" + fecha + archivo.getOriginalFilename();
+        
+        archivo.transferTo(new File(rutaAbsoluta));
+        
+        List<Usuario> usuarios = new ArrayList<>();
+        
+        if (extension.equals("txt")) {
+            usuarios = LecturaArchivo(new File(rutaAbsoluta));
+        } else {
+            usuarios = LecturaArchivoExcel(new File(rutaAbsoluta));    
+        }
+        
+        List<ErrorCarga> errores = ValidarDatos(usuarios);
+        
+        if (errores != null && !errores.isEmpty()) {
+            model.addAttribute("errores", errores);
+            model.addAttribute("tieneErrores", true);
+        } else {
+            model.addAttribute("mensajeExito", "Carga exitosa. Se cargaron " + usuarios.size() + " usuario(s) correctamente");
+            model.addAttribute("tieneErrores", false);
+            
+            sesion.setAttribute("archivoCargaMasiva", rutaAbsoluta);
+        }
+        
+        return "CargaMasiva";
+    }
+
+    private List<Usuario> LecturaArchivo(File archivo) {
+        
+        List<Usuario> usuarios = new ArrayList<>();
+        
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(archivo))){
+            
+            bufferedReader.readLine();
+            String line;
+            
+            while ((line = bufferedReader.readLine()) != null) {                
+                
+                String[] datos = line.split("\\|");
+                
+                Usuario usuario = new Usuario();
+                usuario.setUsername(datos[0]);
+                usuario.setNombre(datos[1]);
+                usuario.setApellidoPaterno(datos[2]);
+                usuario.setApellidoMaterno(datos[3]);
+                usuario.setEmail(datos[4]);
+                usuario.setPassword(datos[5]);
+                usuario.setFechaNacimiento(java.sql.Date.valueOf(datos[6]));
+                usuario.setSexo(datos[7]);
+                usuario.setTelefono(datos[8]);
+                usuario.setCelular(datos[9]);
+                usuario.setCurp(datos[10]);
+                
+                //Direccion
+                usuario.Rol = new Rol();
+                usuario.Rol.setIdRol(Integer.parseInt(datos[11]));
+                
+                //DIRECCION
+                usuario.Direcciones = new ArrayList<>();
+                Direccion Direccion = new Direccion();
+                Direccion.setCalle(datos[12]);
+                Direccion.setNumeroExterior(datos[13]);
+                Direccion.setNumeroInterior(datos[14]);
+                usuario.Direcciones.add(Direccion);
+                
+                Direccion.Colonia = new Colonia();
+                Direccion.Colonia.setIdColonia(Integer.parseInt(datos[15]));
+                
+                usuarios.add(usuario);
+            }
+        }
+        catch(Exception ex){
+            usuarios = null;
+        }
+        
+        return usuarios;
+    }
+
+    private List<Usuario> LecturaArchivoExcel(File archivo) {
+        
+        List<Usuario> usuarios = new ArrayList<>();
+        
+         try (XSSFWorkbook workbook = new XSSFWorkbook(archivo)) {
+             
+            XSSFSheet sheet = workbook.getSheetAt(0);
+
+            for (Row row : sheet) {
+                
+                Usuario usuario = new Usuario();
+                Cell cell0 = row.getCell(0);
+                if (cell0 != null) {
+                    usuario.setUsername(row.getCell(0).toString());
+                } else {
+                    continue;
+                }
+                
+                usuario.setNombre(row.getCell(1).toString());
+                usuario.setApellidoPaterno(row.getCell(2).toString());
+                usuario.setApellidoMaterno(row.getCell(3).toString());
+                usuario.setEmail(row.getCell(4).toString());
+                usuario.setPassword(row.getCell(5).toString());
+                
+                java.util.Date utilDate = row.getCell(6).getDateCellValue();
+                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                usuario.setFechaNacimiento(sqlDate);
+                
+                usuario.setSexo(row.getCell(7).toString());
+                usuario.setCelular(row.getCell(8).toString());
+                usuario.setTelefono(row.getCell(9).toString());
+                usuario.setCurp(row.getCell(10).toString());
+                
+                usuario.Rol = new Rol();
+                usuario.Rol.setIdRol((int) row.getCell(11).getNumericCellValue());
+                //DIRECCION
+                usuario.Direcciones = new ArrayList<>();
+                Direccion Direccion = new Direccion();
+                Direccion.setCalle(row.getCell(12).toString());
+                Direccion.setNumeroExterior(row.getCell(13).toString());
+                Direccion.setNumeroInterior(row.getCell(14).toString());
+                usuario.Direcciones.add(Direccion);
+                
+                Direccion.Colonia = new Colonia();
+                Direccion.Colonia.setIdColonia((int) row.getCell(15).getNumericCellValue());
+                
+                usuarios.add(usuario);
+            }
+            
+        } catch (Exception ex) {
+            usuarios = null;
+        }
+        
+        return usuarios;
+    }
+    
+    private List<ErrorCarga> ValidarDatos(List<Usuario> usuarios) {
+        
+        List<ErrorCarga> erroresCarga = new ArrayList<>();
+        int LineaError = 0;
+        
+        for (Usuario usuario : usuarios) {
+            LineaError++;
+            BindingResult bindingResult = validationService.validateObjects(usuario);
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            
+            if (usuario.Rol == null) {
+                usuario.Rol = new Rol();
+            }
+            if (usuario.Direcciones == null) {
+                usuario.Direcciones = new ArrayList<>();
+                Direccion Direccion = new Direccion();
+                usuario.Direcciones.add(Direccion);
+            }
+            
+            BindingResult bindingResultRol = validationService.validateObjects(usuario.Rol);
+            List<ObjectError> errorsRol = bindingResultRol.getAllErrors();
+            
+            BindingResult bindingResultDireccion = validationService.validateObjects(usuario.Direcciones.get(0));
+            List<ObjectError> errorsDireccion = bindingResultDireccion.getAllErrors();
+            
+            List<ObjectError> listaCombinada = new ArrayList<>(errors);
+            
+            if (!errorsRol.isEmpty()) { 
+                listaCombinada.addAll(errorsRol);
+            }
+            if (!errorsDireccion.isEmpty()) { 
+                listaCombinada.addAll(errorsDireccion);
+            }
+            
+            for (ObjectError error : listaCombinada) {
+                FieldError fieldError = (FieldError) error;
+                ErrorCarga errorCarga = new ErrorCarga();
+                errorCarga.Linea = LineaError;
+                errorCarga.Campo = fieldError.getField();
+                errorCarga.Descripcion = fieldError.getDefaultMessage();
+                
+                erroresCarga.add(errorCarga);
+            }
+        }
+        
+        return erroresCarga;
+    }
+    
+    @GetMapping("CargaMasiva/procesar")
+    public String ProcesarArchivo(HttpSession sesion, Model model, RedirectAttributes redirectAttributes){
+    
+        String rutaArchivo = sesion.getAttribute("archivoCargaMasiva").toString();
+        
+        File archivo = new File(rutaArchivo);
+        String nombreArchivo = archivo.getName();
+        String extension = nombreArchivo.split("\\.")[1];
+        List<Usuario> usuarios = new ArrayList<>();
+        
+        if (extension.equals("txt")) {
+            usuarios = LecturaArchivo(archivo);
+        } else {
+            usuarios = LecturaArchivoExcel(archivo);  
+        }
+        
+        if (usuarios != null && !usuarios.isEmpty()) {
+            
+            List<OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario> usuariosJPA = new ArrayList<>();
+            for (Usuario usuario : usuarios) {
+                ModelMapper modelMapper = new ModelMapper();
+//                modelMapper.typeMap(Usuario.class, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class)
+//                        .addMappings(mapper -> mapper.skip(OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario::)); saltar un atributo de una clase
+                OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioJPA = modelMapper.map(usuario, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class);
+                usuariosJPA.add(usuarioJPA);
+            }
+            
+            Result result = usuarioService.AddAll(usuariosJPA);
+            sesion.removeAttribute("archivoCargaMasiva");
+            
+            if(result.Correct){
+                result.Object = "Se agregó " + usuarios.size() + " usuario(s) nuevo(s)";
+            } else{
+                result.Object = "No fue posible agregar a los usuarios :c";
+            }
+            redirectAttributes.addFlashAttribute("resultCargaMasiva", result);
+            
+            return "redirect:/usuario";
+        } else {
+            return "redirect:/usuario/CargaMasiva";
+        }
+    }
 
 }
