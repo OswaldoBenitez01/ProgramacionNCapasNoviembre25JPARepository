@@ -16,6 +16,7 @@ import OBenitez.ProgramacionNCapasNoviembre25.Service.RolService;
 import OBenitez.ProgramacionNCapasNoviembre25.Service.UsuarioService;
 import OBenitez.ProgramacionNCapasNoviembre25.Service.ValidationService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -111,30 +112,42 @@ public class UsuarioController {
     }
     
     @PostMapping("add")
-    public String Add(Model model, @ModelAttribute("Usuario") Usuario usuario, @RequestParam("imagenUsuario") MultipartFile imagenUsuario, RedirectAttributes redirectAttributes) throws IOException{
+    public String Add(@Valid @ModelAttribute("Usuario") Usuario usuario, BindingResult bindingResult, @RequestParam("imagenUsuario") MultipartFile imagenUsuario, Model model, RedirectAttributes redirectAttributes) throws IOException{
+//        for (ObjectError errors : bindingResult.getAllErrors()) {
+//            System.out.println("Error: " + errors.getDefaultMessage() + " en " + errors.getCode());
+//            System.out.println(errors.getCodes());
+//            
+//            System.out.println("==========================================================================");
+//        }
+//        System.out.println(bindingResult.getAllErrors());
+//        System.out.println(bindingResult.getFieldErrors());
         
-        // AGREGAR USUARIO FULL INFO
-        if (imagenUsuario.isEmpty()) {
-            usuario.setImagen(null);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("Usuario", usuario);
+            return "UsuarioForm"; 
         } else {
-            String encodedString = Base64.getEncoder().encodeToString(imagenUsuario.getBytes());
-            usuario.setImagen(encodedString);
+            // AGREGAR USUARIO FULL INFO
+            if (imagenUsuario.isEmpty()) {  
+                usuario.setImagen(null);
+            } else {
+                String encodedString = Base64.getEncoder().encodeToString(imagenUsuario.getBytes());
+                usuario.setImagen(encodedString);
+            }
+            usuario.setStatus(1);
+
+            ModelMapper modelMapper = new ModelMapper();
+            OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioJPA = modelMapper.map(usuario, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class);
+            Result result = usuarioService.Add(usuarioJPA);
+
+            if(result.Correct){
+                result.Object = "El usuario se agrego correctamente";
+            } else{
+                result.Object = "No fue posible agregar al usuario :c";
+            }
+            redirectAttributes.addFlashAttribute("resultAddUserFull", result);
+            return "redirect:/usuario";
         }
-        usuario.setStatus(1);
 
-        ModelMapper modelMapper = new ModelMapper();
-        OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioJPA = modelMapper.map(usuario, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class);
-        Result result = usuarioService.Add(usuarioJPA);
-
-        //Result result = usuarioDAOImplementation.Add(usuario);
-
-        if(result.Correct){
-            result.Object = "El usuario se agrego correctamente";
-        } else{
-            result.Object = "No fue posible agregar al usuario :c";
-        }
-        redirectAttributes.addFlashAttribute("resultAddUserFull", result);
-        return "redirect:/usuario";
     }
     
     @GetMapping("detail/{IdUsuario}")

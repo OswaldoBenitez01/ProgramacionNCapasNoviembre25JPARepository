@@ -150,7 +150,7 @@
                                     <input type="text" class="form-control" id="nombreInput"
                                            th:field="*{Nombre}" placeholder="Nombre"
                                            onkeypress="LetrasConAcentos(event, this)"
-                                           oncopy="return false" onpaste="return false">
+                                           oncopy="return false" onpaste="return false">                                    
                                     <label for="nombreInput"><i class="bi bi-person-fill"></i> Nombre</label>
                                 </div>
                                 <span class="text-danger" th:if="${#fields.hasErrors('Nombre')}" th:errors="${Usuario.Nombre}"></span>

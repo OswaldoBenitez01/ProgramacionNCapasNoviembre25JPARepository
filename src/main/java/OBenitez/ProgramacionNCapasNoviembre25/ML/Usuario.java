@@ -6,14 +6,14 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.sql.Date;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class Usuario {
     private Integer IdUsuario;
     
-    //@NotNull(message = "El campo es obligatorio.")
     @NotEmpty(message = "El campo es obligatorio.")
     @Size(min=3,max=30, message = "Debe contener al menos 3 caracteres y 20 como maximo.")
-    @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9-_]{3,20}", message = "El nombre de usuario debe empezar con una letra, puede contener numeros y guiones. Debe ser un maximo de 20 caracteres y minimo 3")
+    @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9-_]{3,20}", message = "El nombre de usuario debe empezar con una letra, puede contener numeros y guiones.")
     private String Username;
     
     @NotEmpty(message = "El campo es obligatorio.")
@@ -40,6 +40,7 @@ public class Usuario {
     private String Password;
     
     @NotNull(message = "El campo es obligatorio.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date FechaNacimiento;
     
     @NotEmpty(message = "El campo es obligatorio.")
@@ -47,13 +48,11 @@ public class Usuario {
     private String Sexo;
     
     @NotEmpty(message = "El campo es obligatorio.")
-    @Pattern(regexp = "(\\+?\\d{1})?[-.]?\\(?(\\d{3})\\)?[-.]?(\\d{3})[-.]?(\\d{4})", message = "Ingresa un numero de telefono valido")
-    @Size(min=10,max=10, message = "Ingresa un numero de telefono de 10 digitos")
+    @Pattern(regexp = "(\\+?\\d{1})?[-.]?\\(?(\\d{3})\\)?[-.]?(\\d{3})[-.]?(\\d{4})", message = "Ingresa un numero de telefono valido de 10 digitos")
     private String Telefono;
     
     @NotEmpty(message = "El campo es obligatorio.")
-    @Pattern(regexp = "(\\+?\\d{1})?[-.]?\\(?(\\d{3})\\)?[-.]?(\\d{3})[-.]?(\\d{4})", message = "Ingresa un numero de celular valido")
-    @Size(min=10,max=10, message = "Ingresa un numero de celular de 10 digitos")
+    @Pattern(regexp = "(\\+?\\d{1})?[-.]?\\(?(\\d{3})\\)?[-.]?(\\d{3})[-.]?(\\d{4})", message = "Ingresa un numero de celular valido de 10 digitos")
     private String Celular;
     
     @NotEmpty(message = "El campo es obligatorio.")
@@ -61,7 +60,6 @@ public class Usuario {
     private String Curp;
     
     private String Imagen;
-    
     private int Status;
 
     public Rol Rol;
