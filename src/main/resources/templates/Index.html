@@ -16,19 +16,20 @@
             <h2 class="text-secondary">Usuarios</h2>
 
             <div class="btn-group">
-                <form th:action="@{/logout}">
-                    <button type="submit" class="btn btn-warning">Logout</button>
+                <form th:action="@{/logout}" method="POST">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <button type="submit" class="btn btn-danger">Cerrar Sesion</button>
                 </form>
-                <a th:href="@{/usuario/form}" class="btn btn-success">
+<!--                <a th:href="@{/usuario/form}" class="btn btn-success">
                     <i class="bi bi-person-plus-fill"></i> Agregar Usuario
                 </a>
                 <a th:href="@{/usuario/cargaMasiva}" class="btn btn-primary">
                     <i class="bi bi-file-earmark-arrow-up"></i> Cargar archivo
-                </a>
+                </a>-->
             </div>
         </div>
         
-        <div class="p-4 mb-4">
+        <div class="p-4 mb-1">
             <h5 class="mb-3"> Buscar Usuario</h5>
             
             <form th:action="@{/usuario/busqueda}" th:object="${usuarioBusqueda}" method="post">
@@ -74,6 +75,17 @@
             </form>
         </div>
 
+        <div class="d-flex justify-content-end mb-1">
+            <div class="btn-group">
+                <a th:href="@{/usuario/form}" class="btn btn-success">
+                    <i class="bi bi-person-plus-fill"></i> Agregar Usuario
+                </a>
+                <a th:href="@{/usuario/cargaMasiva}" class="btn btn-primary">
+                    <i class="bi bi-file-earmark-arrow-up"></i> Cargar archivo
+                </a>
+            </div>
+        </div>
+        
         <div th:if="${mensajeBusqueda != null || #lists.isEmpty(Usuarios)}" 
              class="text-center py-5">
             <i class="bi bi-search" style="font-size: 4rem; color: #dc3545"></i>

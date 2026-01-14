@@ -33,7 +33,7 @@ public class SpringSecurityConfiguration {
                 .userDetailsService(userDetailJPAService)
         .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/auth/login?logout")
+                .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .permitAll());
