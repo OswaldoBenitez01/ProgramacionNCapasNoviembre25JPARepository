@@ -16,6 +16,9 @@
             <h2 class="text-secondary">Usuarios</h2>
 
             <div class="btn-group">
+                <form th:action="@{/logout}">
+                    <button type="submit" class="btn btn-warning">Logout</button>
+                </form>
                 <a th:href="@{/usuario/form}" class="btn btn-success">
                     <i class="bi bi-person-plus-fill"></i> Agregar Usuario
                 </a>
