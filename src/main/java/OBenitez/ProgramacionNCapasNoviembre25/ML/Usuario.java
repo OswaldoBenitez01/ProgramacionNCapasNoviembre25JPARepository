@@ -40,7 +40,7 @@ public class Usuario {
     private String Password;
     
     @NotNull(message = "El campo es obligatorio.")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date FechaNacimiento;
     
     @NotEmpty(message = "El campo es obligatorio.")

@@ -21,10 +21,13 @@ public class UserDetailJPAService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.findByUsername(username);
+
+        Boolean usuarioDeshabilitado = (usuario.getStatus() == 0);
         
         return User.withUsername(usuario.getEmail())
                 .password(usuario.getPassword())
                 .roles(usuario.rol.getNombre())
+                .disabled(usuarioDeshabilitado)
                 .build();
     }
     

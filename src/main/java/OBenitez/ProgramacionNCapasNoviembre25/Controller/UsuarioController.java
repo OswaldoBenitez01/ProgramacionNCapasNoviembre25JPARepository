@@ -1,6 +1,7 @@
 
 package OBenitez.ProgramacionNCapasNoviembre25.Controller;
 
+import OBenitez.ProgramacionNCapasNoviembre25.Configuration.SpringSecurityConfiguration;
 import OBenitez.ProgramacionNCapasNoviembre25.ML.Colonia;
 import OBenitez.ProgramacionNCapasNoviembre25.ML.Direccion;
 import OBenitez.ProgramacionNCapasNoviembre25.ML.ErrorCarga;
@@ -67,6 +68,8 @@ public class UsuarioController {
     private DireccionService direccionService;
     @Autowired
     private ValidationService validationService;
+    @Autowired
+    private SpringSecurityConfiguration springSecurityConfiguration;
     
     @GetMapping
     public String GetAll(Model model){
@@ -134,6 +137,7 @@ public class UsuarioController {
                 usuario.setImagen(encodedString);
             }
             usuario.setStatus(1);
+            usuario.setPassword(springSecurityConfiguration.passwordEncoder().encode(usuario.getPassword()));
 
             ModelMapper modelMapper = new ModelMapper();
             OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioJPA = modelMapper.map(usuario, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class);
@@ -274,7 +278,7 @@ public class UsuarioController {
     public String Form(@ModelAttribute Usuario usuario, RedirectAttributes redirectAttributes){
     
         if(usuario.Direcciones.get(0).getIdDireccion() == -1){
-            
+            //usuario.setPassword(springSecurityConfiguration.passwordEncoder().encode(usuario.getPassword()));
             ModelMapper modelMapper = new ModelMapper();
             OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioJPA = modelMapper.map(usuario, OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario.class);
             Result result = usuarioService.UpdateUser(usuarioJPA);
