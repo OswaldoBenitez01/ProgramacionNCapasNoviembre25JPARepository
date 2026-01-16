@@ -34,16 +34,31 @@ public class SpringSecurityConfiguration {
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.authorizeHttpRequests(config -> config
-                .requestMatchers("/usuario/detail/**", 
-                        "/usuario/*", 
-                        "/usuario/getEstadosByPais/**", 
-                        "/usuario/getMunicipiosByEstado/**",
-                        "/usuario/getColoniasByMunicipio/**",
-                        "/usuario/deleteAddress/**",
-                        "/usuario/deletePhoto/**")
-                        .permitAll()
-                .requestMatchers("/**").hasAnyRole("Director", "Administrador(a)")
+        
+        http
+               
+                .authorizeHttpRequests(config -> config
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/usuario/getEstadosByPais/**", 
+                                "/usuario/getMunicipiosByEstado/**",
+                                "/usuario/getColoniasByMunicipio/**")
+                                .authenticated()
+                .requestMatchers("/usuario",
+                                "/usuario/busqueda",
+                                "/usuario/form",
+                                "/usuario/add",
+                                "usuario/delete/**",
+                                "/usuario/toggleStatus/**",
+                                "/usuario/cargaMasiva",
+                                "/usuario/CargaMasiva",
+                                "/usuario/CargaMasiva/**")
+                                .hasAnyRole("Director", "Administrador")
+                .requestMatchers("/usuario/updatePhoto",
+                                "/usuario/detail/**",
+                                "/usuario/deletePhoto/**",
+                                "/usuario/deleteAddress/**",
+                                "/usuario/formEditable")
+                                .hasAnyRole("Director", "Administrador", "Empleado", "Mantenimiento", "Gerente")
                 .anyRequest().authenticated()
         ).formLogin(form -> form
                 .loginPage("/login")
@@ -66,19 +81,43 @@ public class SpringSecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
     
+    private boolean hasRole(Authentication auth, String role){
+        return auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(r -> r.equals("ROLE_" + role));
+    }
+    
     private AuthenticationSuccessHandler successHandler() {
-        return (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) -> {
+        return (request, response, authentication) -> {
             String targetUrl = "";
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-            if(authorities.toString().contains("ROLE_Director")){
+            
+            if(hasRole(authentication, "Director") || hasRole(authentication, "Administrador")){
                 targetUrl = "/usuario";
-            } else if(authorities.toString().contains("ROLE_Empleado")){
+            } else if(hasRole(authentication, "Empleado")
+                    || hasRole(authentication, "Mantenimiento")
+                    || hasRole(authentication, "Gerente")){
                 String email = authentication.getName();
                 int id = usuarioRepository.findByEmail(email).getIdUsuario();
                 targetUrl = "/usuario/detail/" + id;
+            } else {
+                targetUrl = "/login?error";
             }
-            httpServletResponse.sendRedirect(targetUrl);
+            response.sendRedirect(targetUrl);
         };
     }
-
+    
+//    private AuthenticationSuccessHandler successHandler() {
+//        return (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) -> {
+//            String targetUrl = "";
+//            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+//            if(authorities.toString().contains("ROLE_Director")){
+//                targetUrl = "/usuario";
+//            } else if(authorities.toString().contains("ROLE_Empleado")){
+//                String email = authentication.getName();
+//                int id = usuarioRepository.findByEmail(email).getIdUsuario();
+//                targetUrl = "/usuario/detail/" + id;
+//            }
+//            httpServletResponse.sendRedirect(targetUrl);
+//        };
+//    }
 }
