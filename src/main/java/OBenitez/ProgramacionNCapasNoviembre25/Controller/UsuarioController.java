@@ -2,6 +2,7 @@
 package OBenitez.ProgramacionNCapasNoviembre25.Controller;
 
 import OBenitez.ProgramacionNCapasNoviembre25.Configuration.SpringSecurityConfiguration;
+import OBenitez.ProgramacionNCapasNoviembre25.DAO.IUsuarioJPA;
 import OBenitez.ProgramacionNCapasNoviembre25.ML.Colonia;
 import OBenitez.ProgramacionNCapasNoviembre25.ML.Direccion;
 import OBenitez.ProgramacionNCapasNoviembre25.ML.ErrorCarga;
@@ -33,6 +34,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -70,6 +74,27 @@ public class UsuarioController {
     private ValidationService validationService;
     @Autowired
     private SpringSecurityConfiguration springSecurityConfiguration;
+    @Autowired
+    private IUsuarioJPA usuarioRepository;
+    
+    private boolean hasRole(Authentication auth, String role) {
+        return auth.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .anyMatch(r -> r.equals("ROLE_" + role));
+    }
+
+    private boolean isOwnerOrAdmin(int idUsuarioPath) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (hasRole(auth, "Director") || hasRole(auth, "Administrador")) {
+            return true;
+        }
+        String email = auth.getName();  
+        OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioDB =
+                usuarioRepository.findByEmail(email);
+
+        return usuarioDB != null && usuarioDB.getIdUsuario() == idUsuarioPath;
+    }
     
     @GetMapping
     public String GetAll(Model model){
@@ -157,6 +182,10 @@ public class UsuarioController {
     @GetMapping("detail/{IdUsuario}")
     public String Detail(@PathVariable("IdUsuario") int IdUsuario, Model model){
     
+        if (!isOwnerOrAdmin(IdUsuario)) {
+            return "redirect:/login?error=forbidden";
+        }
+        
         Result result = usuarioService.GetById(IdUsuario);
         model.addAttribute("Usuario", result.Object);
         
