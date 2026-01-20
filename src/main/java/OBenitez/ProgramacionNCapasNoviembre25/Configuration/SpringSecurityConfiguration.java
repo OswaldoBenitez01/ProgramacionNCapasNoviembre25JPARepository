@@ -46,6 +46,7 @@ public class SpringSecurityConfiguration {
                                 "/usuario/toggleStatus/**",
                                 "/usuario/cargaMasiva",
                                 "/usuario/CargaMasiva",
+                                "/usuario/CargaMasiva",
                                 "/usuario/CargaMasiva/**")
                                 .hasAnyRole("Director", "Administrador")
                 .requestMatchers("/usuario/updatePhoto",

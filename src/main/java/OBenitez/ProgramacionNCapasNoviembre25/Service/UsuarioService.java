@@ -95,6 +95,25 @@ public class UsuarioService {
         }
         return result;
     }
+    
+    public Result GetUserActivo(String email){
+        Result result = new Result();
+        
+        try {
+            Usuario usuario = usuarioRepository.findByEmail(email);
+            if (usuario == null || usuario.getIdUsuario() == 0 ) {
+                result.Correct = false;
+                result.ErrorMessage = "No se encontro al usuario";
+                return result;
+            }
+            result.Object = usuario;
+            result.Correct = true;
+        } catch (Exception e) {
+        }
+        
+        return result;
+    }
+    
     // ===================== ADD ====================
     public Result Add(Usuario usuario) {
         Result result = new Result();

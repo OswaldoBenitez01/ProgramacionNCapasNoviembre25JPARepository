@@ -111,9 +111,9 @@
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body text-center p-4">
                     <div class="profile-container mb-3">
-                        <img th:src="${Usuario.Imagen != null ? 'data:image/png;base64,' + Usuario.Imagen : 'https://via.placeholder.com/180'}" 
+                        <img th:src="${Usuario.Imagen != null ? 'data:image/png;base64,' + Usuario.Imagen : 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'}" 
                              alt="Foto perfil"
-                             onerror="this.src='https://via.placeholder.com/180'">
+                             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'">
                         <div class="overlay-edit">
                             <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalFoto">
                                 <i class="bi bi-camera"></i> Cambiar
@@ -246,9 +246,6 @@
                                     </button>
                                 </div>
                             </div>
-                            <small class="badge bg-light text-dark float-end mt-2">
-                                [[${iter.index + 1}]] de [[${#lists.size(Usuario.Direcciones)}]]
-                            </small>
                         </div>
                     </div>
                 </div>
@@ -404,7 +401,7 @@
                             </div>
                             <!-- PASSWORD HIDDEN (NO ADMIN/DIRECTOR) - MANTIENE LA ACTUAL -->
                             <div sec:authorize="!hasAnyRole('ROLE_Administrador', 'ROLE_Director')">
-                                <input type="hidden" name="Password" th:value="${Usuario.Password}">
+                                <input type="hidden" name="Password" value="">
                             </div>
                         </div>
                     </div>

@@ -33,6 +33,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,7 +78,17 @@ public class UsuarioController {
 
     @GetMapping
     public String GetAll(Model model) {
+        
         try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String name = auth.getName();
+            Result resultUserActivo = usuarioService.GetUserActivo(name);
+            
+            
+            OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioActual = (OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario) resultUserActivo.Object;
+            
+            model.addAttribute("username", usuarioActual.getUsername());
+            
             Result result = usuarioService.GetAll();
             model.addAttribute("Usuarios", result != null ? result.Objects : new ArrayList<>());
             model.addAttribute("usuarioBusqueda", new Usuario());
@@ -479,8 +491,6 @@ public class UsuarioController {
 
         return "redirect:/usuario/detail/" + usuario.getIdUsuario();
     }
-
-
 
     @GetMapping("cargaMasiva")
     public String CargaMsiva() {
