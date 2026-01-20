@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.sql.Date;
 import java.util.List;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class Usuario {
     private Integer IdUsuario;
