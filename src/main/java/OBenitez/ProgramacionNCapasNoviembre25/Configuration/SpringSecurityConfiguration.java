@@ -45,10 +45,12 @@ public class SpringSecurityConfiguration {
                                 "usuario/delete/**",
                                 "/usuario/toggleStatus/**",
                                 "/usuario/cargaMasiva",
+                                "/usuario/cargaMasiva/**",
                                 "/usuario/CargaMasiva",
-                                "/usuario/CargaMasiva",
+                                "/usuario/CargaMasiva/procesar",
                                 "/usuario/CargaMasiva/**")
                                 .hasAnyRole("Director", "Administrador")
+                                //.hasAnyAuthority("Director", "Administrador")
                 .requestMatchers("/usuario/updatePhoto",
                                 "/usuario/detail/**",
                                 "/usuario/deletePhoto/**",
@@ -67,7 +69,9 @@ public class SpringSecurityConfiguration {
                 .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .permitAll());
+                .permitAll())
+        .exceptionHandling(ex -> ex
+                .accessDeniedPage("/login?error=forbidden"));
         
          return http.build();
     }
