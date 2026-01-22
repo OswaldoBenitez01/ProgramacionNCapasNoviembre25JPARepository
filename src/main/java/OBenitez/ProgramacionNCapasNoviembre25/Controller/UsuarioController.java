@@ -83,8 +83,7 @@ public class UsuarioController {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String name = auth.getName();
             Result resultUserActivo = usuarioService.GetUserActivo(name);
-            
-            
+
             OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario usuarioActual = (OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario) resultUserActivo.Object;
             
             model.addAttribute("username", usuarioActual.getUsername());
