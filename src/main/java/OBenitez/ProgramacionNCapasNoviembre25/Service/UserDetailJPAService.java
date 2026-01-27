@@ -27,7 +27,8 @@ public class UserDetailJPAService implements UserDetailsService{
         return User.withUsername(usuario.getEmail())
                 .password(usuario.getPassword())
                 .roles(usuario.rol.getNombre())
-                .disabled(usuarioDeshabilitado)
+                //.accountExpired(usuarioDeshabilitado)
+                //.disabled(usuarioDeshabilitado)
                 .build();
     }
     

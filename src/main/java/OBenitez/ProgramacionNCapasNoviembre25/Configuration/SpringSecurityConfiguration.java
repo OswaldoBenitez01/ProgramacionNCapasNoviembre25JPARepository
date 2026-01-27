@@ -1,6 +1,7 @@
 package OBenitez.ProgramacionNCapasNoviembre25.Configuration;
 
 import OBenitez.ProgramacionNCapasNoviembre25.DAO.IUsuarioJPA;
+import OBenitez.ProgramacionNCapasNoviembre25.JPA.Usuario;
 import OBenitez.ProgramacionNCapasNoviembre25.Service.UserDetailJPAService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -72,7 +73,6 @@ public class SpringSecurityConfiguration {
                 .permitAll())
         .exceptionHandling(ex -> ex
                 .accessDeniedPage("/login?error=forbidden"));
-        
          return http.build();
     }
     
@@ -89,15 +89,15 @@ public class SpringSecurityConfiguration {
     
     private AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
+            String email = authentication.getName();
+            Usuario usuario = usuarioRepository.findByEmail(email);
+            request.getSession().setAttribute("statusUsuario", usuario.getStatus());
+
             String targetUrl = "";
-            
             if(hasRole(authentication, "Director") || hasRole(authentication, "Administrador")){
                 targetUrl = "/usuario";
-            } else if(hasRole(authentication, "Empleado")
-                    || hasRole(authentication, "Mantenimiento")
-                    || hasRole(authentication, "Gerente")){
-                String email = authentication.getName();
-                int id = usuarioRepository.findByEmail(email).getIdUsuario();
+            } else if(hasRole(authentication, "Empleado") || hasRole(authentication, "Mantenimiento") || hasRole(authentication, "Gerente")){
+                int id = usuario.getIdUsuario();
                 targetUrl = "/usuario/detail/" + id;
             } else {
                 targetUrl = "/login?error";
